@@ -2831,6 +2831,9 @@ FlyWButton.MouseButton1Up:Connect(function()
 end)
 
 local TELEPORT_KEY = nil
+local TELEPORT_HEIGHT_OFFSET = 3
+local MAX_GROUND_CHECK = 50
+
 local holdingTeleportKey = false
 
 uis.InputBegan:Connect(function(input, processed)
@@ -2847,21 +2850,36 @@ end)
 
 local function teleportToMouse()
     local character = player.Character
-    if character and character:FindFirstChild("HumanoidRootPart") then
-        local hrp = character.HumanoidRootPart
-        local targetPos = mouse.Hit.Position + Vector3.new(0, 3, 0)
+    if not (character and character:FindFirstChild("HumanoidRootPart")) then return end
+    local hrp = character.HumanoidRootPart
 
-        local lookAtPos = Vector3.new(targetPos.X, hrp.Position.Y, targetPos.Z)
+    local targetPos = mouse.Hit.Position
+
+    local rayOrigin = targetPos + Vector3.new(0, MAX_GROUND_CHECK/2, 0)
+    local rayDirection = Vector3.new(0, -MAX_GROUND_CHECK, 0)
+    local raycastParams = RaycastParams.new()
+    raycastParams.FilterDescendantsInstances = {character} -- Ignore self
+    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+
+    local rayResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
+
+    if rayResult then
+        local groundPos = rayResult.Position
+        local finalPos = groundPos + Vector3.new(0, TELEPORT_HEIGHT_OFFSET, 0)
+
+        local lookAtPos = Vector3.new(finalPos.X, hrp.Position.Y, finalPos.Z)
         local direction = (lookAtPos - hrp.Position).Unit
         local yaw = math.atan2(direction.X, direction.Z)
 
         yaw = yaw + math.pi
 
         hrp.Anchored = true
-        hrp.CFrame = CFrame.new(targetPos.X, hrp.Position.Y, targetPos.Z) * CFrame.Angles(0, yaw, 0)
+        hrp.CFrame = CFrame.new(finalPos.X, hrp.Position.Y, finalPos.Z) * CFrame.Angles(0, yaw, 0)
         hrp.Velocity = Vector3.zero
         hrp.RotVelocity = Vector3.zero
         hrp.Anchored = false
+    else
+        SendNotify("Echo", "No ground detected under the mouse! Teleport canceled.", 5)
     end
 end
 
