@@ -3,7 +3,7 @@ if game.CoreGui:FindFirstChild("SysBroker") then
 	game:GetService("StarterGui")
 	return
 end
-local version = 3
+local version = 4
 --VARIABLES
 _G.AntiFlingToggled = false
 local Players = game:GetService("Players")
@@ -15,12 +15,14 @@ local HttpService = game:GetService("HttpService")
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
 local uis = game:GetService("UserInputService")
+local workspace = game:GetService("Workspace")
 local httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 local mouse = plr:GetMouse()
 local ScriptWhitelist = {}
 local ForceWhitelist = {}
 local TargetedPlayer = nil
 local TELEPORT_KEY = nil
+local PlateGenEnabled = false
 local FlyKey = nil
 local FlySpeed = 50
 local PotionTool = nil
@@ -311,6 +313,7 @@ local FlyKeyBind_Button = Instance.new("TextButton")
 local TeleportKeyBind_Input = Instance.new("TextBox")
 local TeleportKeyBind_Button = Instance.new("TextButton")
 local Fly_Button = Instance.new("TextButton")
+local PlateGen_Button = Instance.new("TextButton")
 local Target_Section = Instance.new("ScrollingFrame")
 local TargetImage = Instance.new("ImageLabel")
 local ClickTargetTool_Button = Instance.new("ImageButton")
@@ -946,7 +949,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Added Teleport And Working Binds Default Is Nothing Can Be Rebined In Character Section"
+Announce_Label.Text = "Added Plate Gen"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -1047,7 +1050,7 @@ SaveCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 SaveCheckpoint_Button.BackgroundTransparency = 0.500
 SaveCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SaveCheckpoint_Button.BorderSizePixel = 0
-SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 275)
+SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 375)
 SaveCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 SaveCheckpoint_Button.Font = Enum.Font.Oswald
 SaveCheckpoint_Button.Text = "Save checkpoint"
@@ -1175,6 +1178,21 @@ Fly_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
 Fly_Button.TextScaled = true
 Fly_Button.TextSize = 14.000
 Fly_Button.TextWrapped = true
+
+PlateGen_Button.Name = "PlateGen_Button"
+PlateGen_Button.Parent = Character_Section
+PlateGen_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PlateGen_Button.BackgroundTransparency = 0.500
+PlateGen_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+PlateGen_Button.BorderSizePixel = 0
+PlateGen_Button.Position = UDim2.new(0, 210, 0, 275)
+PlateGen_Button.Size = UDim2.new(0, 150, 0, 30)
+PlateGen_Button.Font = Enum.Font.Oswald
+PlateGen_Button.Text = "Plate Gen"
+PlateGen_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+PlateGen_Button.TextScaled = true
+PlateGen_Button.TextSize = 14.000
+PlateGen_Button.TextWrapped = true
 
 Target_Section.Name = "Target_Section"
 Target_Section.Parent = Background
@@ -2128,6 +2146,7 @@ CreateClicker(SkyscraperTP_Button)
 CreateClicker(PoolTP_Button)
 
 CreateToggle(Fly_Button)
+CreateToggle(PlateGen_Button)
 CreateClicker(WalkSpeed_Button)
 CreateClicker(ClearCheckpoint_Button)
 CreateClicker(JumpPower_Button)
@@ -2585,6 +2604,97 @@ CMDBar.FocusLost:Connect(function()
 end)
 
 --CHARACTER SECTION
+
+local player = game.Players.LocalPlayer
+local runService = game:GetService("RunService")
+local workspace = game:GetService("Workspace")
+
+local PLATE_SIZE = Vector3.new(4,1,4)
+local GRID_RADIUS = 1
+local GROUND_Y = -1
+local plates = {}
+
+local GRASS_MATERIAL = Enum.Material.Grass
+local GRASS_COLOR = Color3.fromRGB(80, 170, 95)
+
+local function createPlate(position)
+    local plate = Instance.new("Part")
+    plate.Size = PLATE_SIZE
+    plate.Anchored = true
+    plate.CanCollide = true
+    plate.Position = Vector3.new(position.X, GROUND_Y + PLATE_SIZE.Y/2, position.Z)
+    plate.Material = GRASS_MATERIAL
+    plate.Color = GRASS_COLOR
+    plate.Parent = workspace
+    table.insert(plates, plate)
+    return plate
+end
+
+local function getPlateUnderPosition(pos)
+    for _, plate in pairs(plates) do
+        local size = plate.Size
+        local pPos = plate.Position
+        if pos.X > pPos.X - size.X/2 and pos.X < pPos.X + size.X/2 and
+           pos.Z > pPos.Z - size.Z/2 and pos.Z < pPos.Z + size.Z/2 then
+            return plate
+        end
+    end
+    return nil
+end
+
+runService.RenderStepped:Connect(function()
+    pcall(function()
+        if not plateGenEnabled then
+            for i = #plates, 1, -1 do
+                local plate = plates[i]
+                if plate and plate.Parent then
+                    plate:Destroy()
+                end
+                table.remove(plates, i)
+            end
+            return
+        end
+
+        local character = player.Character
+        if not character then return end
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+
+        local playerPos = hrp.Position
+        local platesThisFrame = {}
+
+        for x = -GRID_RADIUS, GRID_RADIUS do
+            for z = -GRID_RADIUS, GRID_RADIUS do
+                local gridX = math.floor((playerPos.X + x * PLATE_SIZE.X)/PLATE_SIZE.X) * PLATE_SIZE.X
+                local gridZ = math.floor((playerPos.Z + z * PLATE_SIZE.Z)/PLATE_SIZE.Z) * PLATE_SIZE.Z
+                local gridPos = Vector3.new(gridX, GROUND_Y, gridZ)
+
+                local plate = getPlateUnderPosition(gridPos)
+                if not plate then
+                    plate = createPlate(gridPos)
+                end
+                table.insert(platesThisFrame, plate)
+            end
+        end
+
+        for i = #plates, 1, -1 do
+            local plate = plates[i]
+            if not table.find(platesThisFrame, plate) then
+                if plate and plate.Parent then
+                    plate:Destroy()
+                end
+                table.remove(plates, i)
+            end
+        end
+    end)
+end)
+
+PlateGen_Button.MouseButton1Click:Connect(function()
+    plateGenEnabled = not plateGenEnabled
+    pcall(function()
+        ChangeToggleColor(PlateGen_Button)
+    end)
+end)
 
 WalkSpeed_Button.MouseButton1Click:Connect(function()
 	pcall(function()
