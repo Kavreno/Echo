@@ -3873,6 +3873,10 @@ plr.CharacterAdded:Connect(function(x)
 		KeyUpFunction:Disconnect()
 		SendNotify("Echo","Fly was automatically disabled due to your character respawn",5)
 	end
+
+if player.Character then
+    connectDeathListener(player.Character)
+end
 	x.Humanoid.Died:Connect(function()
 		pcall(function()
 			x["Pushed"].Disabled = false
@@ -3883,12 +3887,12 @@ plr.CharacterAdded:Connect(function(x)
 	local appearance = players:GetCharacterAppearanceAsync(plr.UserId)
 	local original_accs = {}
 	local accs = {}
-	for i,acc in pairs(appearance:GetChildren()) do --Save original accessoryes
+	for i,acc in pairs(appearance:GetChildren()) do
 		if acc:IsA("Accessory") then
 			table.insert(original_accs, acc.Name)
 		end
 	end
-	for i,acc in pairs(plr.Character:GetChildren()) do --Save player accessoryes
+	for i,acc in pairs(plr.Character:GetChildren()) do
 		if acc:IsA("Accessory") then
 			table.insert(accs, acc.Name)
 		end
@@ -3915,6 +3919,42 @@ plr.CharacterAdded:Connect(function(x)
 	end
 	appearance:Destroy()
 end)
+
+local function connectPlateGenDeath(character)
+    local humanoid = character:WaitForChild("Humanoid")
+
+    humanoid.Died:Connect(function()
+        if PlateGen_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(0,255,0) then
+            ChangeToggleColor(PlateGen_Button)
+            plateGenEnabled = false
+
+            -- Destroy all plates
+            for i = #plates, 1, -1 do
+                local plate = plates[i]
+                if plate and plate.Parent then
+                    plate:Destroy()
+                end
+                table.remove(plates, i)
+            end
+
+            SendNotify(
+                "Echo",
+                "Plate Generator was automatically disabled due to your character respawn",
+                5
+            )
+        end
+    end)
+end
+
+-- Hook into respawns
+player.CharacterAdded:Connect(function(character)
+    connectPlateGenDeath(character)
+end)
+
+-- Hook current character
+if player.Character then
+    connectPlateGenDeath(player.Character)
+end
 
 game:GetService("UserInputService").InputBegan:Connect(function(input,gameProcessedEvent)
 	if gameProcessedEvent then return end
