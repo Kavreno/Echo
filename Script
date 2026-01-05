@@ -304,6 +304,8 @@ local FlySpeed_Button = Instance.new("TextButton")
 local FlySpeed_Input = Instance.new("TextBox")
 local FlyKeyBind_Input = Instance.new("TextBox")
 local FlyKeyBind_Button = Instance.new("TextButton")
+local TeleportKeyBind_Input = Instance.new("TextBox")
+local TeleportKeyBind_Button = Instance.new("TextButton")
 local Fly_Button = Instance.new("TextButton")
 local Target_Section = Instance.new("ScrollingFrame")
 local TargetImage = Instance.new("ImageLabel")
@@ -940,7 +942,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Fixed Fly KeyBind No Defualt Can Be ReBound In Character Section"
+Announce_Label.Text = "Added Teleport Bindings Do Not Work Just Preparing "
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -957,7 +959,7 @@ Character_Section.BorderSizePixel = 0
 Character_Section.Position = UDim2.new(0, 105, 0, 30)
 Character_Section.Size = UDim2.new(0, 395, 0, 320)
 Character_Section.Visible = false
-Character_Section.CanvasSize = UDim2.new(0, 0, 1, 0)
+Character_Section.CanvasSize = UDim2.new(0, 0, 1.5, 0)
 Character_Section.ScrollBarThickness = 5
 
 WalkSpeed_Button.Name = "WalkSpeed_Button"
@@ -996,7 +998,7 @@ ClearCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 ClearCheckpoint_Button.BackgroundTransparency = 0.500
 ClearCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ClearCheckpoint_Button.BorderSizePixel = 0
-ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 275)
+ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 325)
 ClearCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 ClearCheckpoint_Button.Font = Enum.Font.Oswald
 ClearCheckpoint_Button.Text = "Clear checkpoint"
@@ -1041,7 +1043,7 @@ SaveCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 SaveCheckpoint_Button.BackgroundTransparency = 0.500
 SaveCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SaveCheckpoint_Button.BorderSizePixel = 0
-SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 225)
+SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 275)
 SaveCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 SaveCheckpoint_Button.Font = Enum.Font.Oswald
 SaveCheckpoint_Button.Text = "Save checkpoint"
@@ -1056,7 +1058,7 @@ Respawn_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 Respawn_Button.BackgroundTransparency = 0.500
 Respawn_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Respawn_Button.BorderSizePixel = 0
-Respawn_Button.Position = UDim2.new(0, 25, 0, 275)
+Respawn_Button.Position = UDim2.new(0, 25, 0, 325)
 Respawn_Button.Size = UDim2.new(0, 150, 0, 30)
 Respawn_Button.Font = Enum.Font.Oswald
 Respawn_Button.Text = "Respawn"
@@ -1110,6 +1112,36 @@ FlyKeyBind_Input.TextColor3 = Color3.fromRGB(20, 20, 20)
 FlyKeyBind_Input.TextSize = 14.000
 FlyKeyBind_Input.TextWrapped = true
 
+TeleportKeyBind_Button.Name = "TeleportKeyBind_Button"
+TeleportKeyBind_Button.Parent = Character_Section
+TeleportKeyBind_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+TeleportKeyBind_Button.BackgroundTransparency = 0.500
+TeleportKeyBind_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TeleportKeyBind_Button.BorderSizePixel = 0
+TeleportKeyBind_Button.Position = UDim2.new(0, 25, 0, 225)
+TeleportKeyBind_Button.Size = UDim2.new(0, 150, 0, 30)
+TeleportKeyBind_Button.Font = Enum.Font.Oswald
+TeleportKeyBind_Button.Text = "Teleport Key"
+TeleportKeyBind_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+TeleportKeyBind_Button.TextScaled = true
+TeleportKeyBind_Button.TextSize = 14.000
+TeleportKeyBind_Button.TextWrapped = true
+
+TeleportKeyBind_Input.Name = "TeleportKeyBind_Input"
+TeleportKeyBind_Input.Parent = Character_Section
+TeleportKeyBind_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+TeleportKeyBind_Input.BackgroundTransparency = 0.300
+TeleportKeyBind_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
+TeleportKeyBind_Input.Position = UDim2.new(0, 210, 0, 225)
+TeleportKeyBind_Input.Size = UDim2.new(0, 175, 0, 30)
+TeleportKeyBind_Input.Font = Enum.Font.Gotham
+TeleportKeyBind_Input.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
+TeleportKeyBind_Input.PlaceholderText = "Press Any Key"
+TeleportKeyBind_Input.Text = ""
+TeleportKeyBind_Input.TextColor3 = Color3.fromRGB(20, 20, 20)
+TeleportKeyBind_Input.TextSize = 14.000
+TeleportKeyBind_Input.TextWrapped = true
+
 FlySpeed_Input.Name = "FlySpeed_Input"
 FlySpeed_Input.Parent = Character_Section
 FlySpeed_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
@@ -1131,7 +1163,7 @@ Fly_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 Fly_Button.BackgroundTransparency = 0.500
 Fly_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Fly_Button.BorderSizePixel = 0
-Fly_Button.Position = UDim2.new(0, 25, 0, 225)
+Fly_Button.Position = UDim2.new(0, 25, 0, 275)
 Fly_Button.Size = UDim2.new(0, 150, 0, 30)
 Fly_Button.Font = Enum.Font.Oswald
 Fly_Button.Text = "Fly"
@@ -2099,6 +2131,7 @@ CreateClicker(SaveCheckpoint_Button)
 CreateClicker(Respawn_Button)
 CreateClicker(FlySpeed_Button)
 CreateClicker(FlyKeyBind_Button)
+CreateClicker(TeleportKeyBind_Button)
 
 CreateToggle(ViewTarget_Button)
 CreateToggle(FlingTarget_Button)
@@ -2720,6 +2753,18 @@ local function StartFly()
 	task.spawn(Fly)
 end
 
+local function ResetFlyInputs()
+	ctrl.f = 0
+	ctrl.b = 0
+	ctrl.l = 0
+	ctrl.r = 0
+
+	keyrelease("0x57") -- W
+	keyrelease("0x41") -- A
+	keyrelease("0x53") -- S
+	keyrelease("0x44") -- D
+end
+
 local function StopFly()
 	if not flying then return end
 	flying = false
@@ -2728,6 +2773,8 @@ local function StopFly()
 
 	Fly_Pad.Visible = false
 	StopAnim()
+
+	ResetFlyInputs()
 
 	if KeyDownFunction then KeyDownFunction:Disconnect() end
 	if KeyUpFunction then KeyUpFunction:Disconnect() end
