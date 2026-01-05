@@ -2654,64 +2654,55 @@ local KeyDownFunction
 local KeyUpFunction
 
 local function Fly()
-	local char = plr.Character
-	if not char then return end
+    local char = plr.Character
+    if not char then return end
 
-	local UpperTorso = char:WaitForChild("UpperTorso")
-	local Humanoid = char:WaitForChild("Humanoid")
+    local torso = char:FindFirstChild("UpperTorso") or char:FindFirstChild("Torso")
+    local Humanoid = char:FindFirstChildOfClass("Humanoid")
+    if not torso or not Humanoid then return end
 
-	local speed = 0
+    local speed = 0
 
-	local bg = Instance.new("BodyGyro")
-	bg.P = 9e4
-	bg.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
-	bg.CFrame = UpperTorso.CFrame
-	bg.Parent = UpperTorso
+    local bg = Instance.new("BodyGyro")
+    bg.P = 9e4
+    bg.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+    bg.CFrame = torso.CFrame
+    bg.Parent = torso
 
-	local bv = Instance.new("BodyVelocity")
-	bv.Velocity = Vector3.new(0, 0.1, 0)
-	bv.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-	bv.Parent = UpperTorso
+    local bv = Instance.new("BodyVelocity")
+    bv.Velocity = Vector3.new(0, 0.1, 0)
+    bv.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    bv.Parent = torso
 
-	Humanoid.PlatformStand = true
+    Humanoid.PlatformStand = true
 
-	while flying do
-		RunService.RenderStepped:Wait()
+    while flying do
+        RunService.RenderStepped:Wait()
 
-		if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
-			speed = FlySpeed
-		else
-			speed = math.max(speed - FlySpeed * 0.1, 0)
-		end
+        if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+            speed = FlySpeed
+        else
+            speed = math.max(speed - FlySpeed * 0.1, 0)
+        end
 
-		if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
-			bv.Velocity =
-				((workspace.CurrentCamera.CFrame.LookVector * (ctrl.f + ctrl.b)) +
-				((workspace.CurrentCamera.CFrame * CFrame.new(ctrl.l + ctrl.r, (ctrl.f + ctrl.b) * 0.2, 0)).Position -
-				workspace.CurrentCamera.CFrame.Position)) * speed
+        if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+            bv.Velocity =
+                ((workspace.CurrentCamera.CFrame.LookVector * (ctrl.f + ctrl.b)) +
+                ((workspace.CurrentCamera.CFrame * CFrame.new(ctrl.l + ctrl.r, (ctrl.f + ctrl.b) * 0.2, 0)).Position -
+                workspace.CurrentCamera.CFrame.Position)) * speed
+        else
+            bv.Velocity = Vector3.new(0, 0.1, 0)
+        end
 
-			lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
-		elseif speed ~= 0 then
-			bv.Velocity =
-				((workspace.CurrentCamera.CFrame.LookVector * (lastctrl.f + lastctrl.b)) +
-				((workspace.CurrentCamera.CFrame * CFrame.new(lastctrl.l + lastctrl.r, (lastctrl.f + lastctrl.b) * 0.2, 0)).Position -
-				workspace.CurrentCamera.CFrame.Position)) * speed
-		else
-			bv.Velocity = Vector3.new(0, 0.1, 0)
-		end
+        bg.CFrame = CFrame.new(
+            torso.Position,
+            torso.Position + workspace.CurrentCamera.CFrame.LookVector
+        )
+    end
 
-		bg.CFrame = CFrame.new(
-			UpperTorso.Position,
-			UpperTorso.Position + workspace.CurrentCamera.CFrame.LookVector
-		)
-	end
-
-	ctrl = {f = 0, b = 0, l = 0, r = 0}
-	lastctrl = {f = 0, b = 0, l = 0, r = 0}
-
-	bg:Destroy()
-	bv:Destroy()
-	Humanoid.PlatformStand = false
+    bg:Destroy()
+    bv:Destroy()
+    Humanoid.PlatformStand = false
 end
 
 local function StartFly()
