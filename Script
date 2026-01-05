@@ -20,6 +20,7 @@ local mouse = plr:GetMouse()
 local ScriptWhitelist = {}
 local ForceWhitelist = {}
 local TargetedPlayer = nil
+local TELEPORT_KEY = nil
 local FlyKey = nil
 local FlySpeed = 50
 local PotionTool = nil
@@ -945,7 +946,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Added Teleport Bindings Do Not Work Just Preparing "
+Announce_Label.Text = "Added Teleport And Working Binds Default Is Nothing Can Be Rebined In Character Section"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -2639,6 +2640,30 @@ FlyKeyBind_Button.MouseButton1Click:Connect(function()
     end
 end)
 
+TeleportKeyBind_Button.MouseButton1Click:Connect(function()
+    TeleportKeyBind_Input:ReleaseFocus()
+    local text = TeleportKeyBind_Input.Text
+    if text == "" then
+        SendNotify("Echo", "Please enter a key", 5)
+        return
+    end
+
+    local keyEnum
+    for _, key in ipairs(Enum.KeyCode:GetEnumItems()) do
+        if key.Name:lower() == text:lower() then
+            keyEnum = key
+            break
+        end
+    end
+
+    if keyEnum then
+        TELEPORT_KEY = keyEnum
+        SendNotify("Echo", "Teleport key updated: " .. keyEnum.Name, 5)
+    else
+        SendNotify("Echo", "Invalid key: " .. text, 5)
+    end
+end)
+
 Respawn_Button.MouseButton1Click:Connect(function()
 	local RsP = GetRoot(plr).Position
 	plr.Character.Humanoid.Health = 0
@@ -2830,35 +2855,40 @@ FlyWButton.MouseButton1Up:Connect(function()
 	keyrelease("0x57")
 end)
 
-local TELEPORT_KEY = nil
 local TELEPORT_HEIGHT_OFFSET = 3
 local MAX_GROUND_CHECK = 50
-
 local holdingTeleportKey = false
 
-uis.InputBegan:Connect(function(input, processed)
-    if not processed and input.KeyCode == TELEPORT_KEY then
+uis.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if TELEPORT_KEY and input.KeyCode == TELEPORT_KEY then
         holdingTeleportKey = true
     end
 end)
 
-uis.InputEnded:Connect(function(input, processed)
-    if input.KeyCode == TELEPORT_KEY then
+
+uis.InputEnded:Connect(function(input, gp)
+    if TELEPORT_KEY and input.KeyCode == TELEPORT_KEY then
         holdingTeleportKey = false
     end
 end)
 
 local function teleportToMouse()
+    if not TELEPORT_KEY then
+        SendNotify("Echo", "Teleport key not set!", 5)
+        return
+    end
+
     local character = player.Character
     if not (character and character:FindFirstChild("HumanoidRootPart")) then return end
     local hrp = character.HumanoidRootPart
 
     local targetPos = mouse.Hit.Position
 
-    local rayOrigin = targetPos + Vector3.new(0, MAX_GROUND_CHECK/2, 0)
+    local rayOrigin = targetPos + Vector3.new(0, MAX_GROUND_CHECK / 2, 0)
     local rayDirection = Vector3.new(0, -MAX_GROUND_CHECK, 0)
     local raycastParams = RaycastParams.new()
-    raycastParams.FilterDescendantsInstances = {character} -- Ignore self
+    raycastParams.FilterDescendantsInstances = {character}
     raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
 
     local rayResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
@@ -2867,14 +2897,20 @@ local function teleportToMouse()
         local groundPos = rayResult.Position
         local finalPos = groundPos + Vector3.new(0, TELEPORT_HEIGHT_OFFSET, 0)
 
-        local lookAtPos = Vector3.new(finalPos.X, hrp.Position.Y, finalPos.Z)
-        local direction = (lookAtPos - hrp.Position).Unit
+        local lookAtPos = Vector3.new(targetPos.X, finalPos.Y, targetPos.Z)
+        local direction = (lookAtPos - hrp.Position)
+        if direction.Magnitude > 0 then
+            direction = direction.Unit
+        else
+            direction = Vector3.new(0, 0, 1)
+        end
+
         local yaw = math.atan2(direction.X, direction.Z)
 
         yaw = yaw + math.pi
 
         hrp.Anchored = true
-        hrp.CFrame = CFrame.new(finalPos.X, hrp.Position.Y, finalPos.Z) * CFrame.Angles(0, yaw, 0)
+        hrp.CFrame = CFrame.new(finalPos) * CFrame.Angles(0, yaw, 0)
         hrp.Velocity = Vector3.zero
         hrp.RotVelocity = Vector3.zero
         hrp.Anchored = false
@@ -2884,7 +2920,7 @@ local function teleportToMouse()
 end
 
 mouse.Button1Down:Connect(function()
-    if holdingTeleportKey then
+    if TELEPORT_KEY and holdingTeleportKey then
         teleportToMouse()
     end
 end)
