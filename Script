@@ -323,6 +323,7 @@ local ViewTarget_Button = Instance.new("TextButton")
 local FlingTarget_Button = Instance.new("TextButton")
 local FocusTarget_Button = Instance.new("TextButton")
 local BenxTarget_Button = Instance.new("TextButton")
+local FaceTarget_Button = Instance.new("TextButton")
 local PushTarget_Button = Instance.new("TextButton")
 local WhitelistTarget_Button = Instance.new("TextButton")
 local TeleportTarget_Button = Instance.new("TextButton")
@@ -1204,7 +1205,7 @@ Target_Section.BorderSizePixel = 0
 Target_Section.Position = UDim2.new(0, 105, 0, 30)
 Target_Section.Size = UDim2.new(0, 395, 0, 320)
 Target_Section.Visible = false
-Target_Section.CanvasSize = UDim2.new(0, 0, 1.25, 0)
+Target_Section.CanvasSize = UDim2.new(0, 0, 1.5, 0)
 Target_Section.ScrollBarThickness = 5
 
 TargetImage.Name = "TargetImage"
@@ -1316,6 +1317,21 @@ BenxTarget_Button.TextScaled = true
 BenxTarget_Button.TextSize = 14.000
 BenxTarget_Button.TextWrapped = true
 
+FaceTarget_Button.Name = "FaceTarget_Button"
+FaceTarget_Button.Parent = Target_Section
+FaceTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+FaceTarget_Button.BackgroundTransparency = 0.500
+FaceTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FaceTarget_Button.BorderSizePixel = 0
+FaceTarget_Button.Position = UDim2.new(0, 210, 0, 350)
+FaceTarget_Button.Size = UDim2.new(0, 150, 0, 30)
+FaceTarget_Button.Font = Enum.Font.Oswald
+FaceTarget_Button.Text = "Face"
+FaceTarget_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+FaceTarget_Button.TextScaled = true
+FaceTarget_Button.TextSize = 14.000
+FaceTarget_Button.TextWrapped = true
+
 PushTarget_Button.Name = "PushTarget_Button"
 PushTarget_Button.Parent = Target_Section
 PushTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
@@ -1352,7 +1368,7 @@ TeleportTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 TeleportTarget_Button.BackgroundTransparency = 0.500
 TeleportTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 TeleportTarget_Button.BorderSizePixel = 0
-TeleportTarget_Button.Position = UDim2.new(0, 210, 0, 350)
+TeleportTarget_Button.Position = UDim2.new(0, 210, 0, 450)
 TeleportTarget_Button.Size = UDim2.new(0, 150, 0, 30)
 TeleportTarget_Button.Font = Enum.Font.Oswald
 TeleportTarget_Button.Text = "Teleport"
@@ -2160,6 +2176,7 @@ CreateToggle(ViewTarget_Button)
 CreateToggle(FlingTarget_Button)
 CreateToggle(FocusTarget_Button)
 CreateToggle(BenxTarget_Button)
+CreateToggle(FaceTarget_Button)
 CreateToggle(HeadsitTarget_Button)
 CreateToggle(StandTarget_Button)
 CreateToggle(BackpackTarget_Button)
@@ -2251,6 +2268,7 @@ local function UpdateTarget(player)
 		ViewTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		FocusTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		BenxTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
+		FaceTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		HeadsitTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		StandTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		BackpackTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
