@@ -941,7 +941,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Fixed R6 Fly Not Working. Working On Fix For Animations Still Playing When Flying"
+Announce_Label.Text = "Fixed Animations Still Playing When Flying"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -2679,26 +2679,41 @@ local function Fly()
         return
     end
 
-    local bg = Instance.new("BodyGyro", torso)
+    local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
+
+    local bg = Instance.new("BodyGyro")
     bg.P = 9000
     bg.maxTorque = Vector3.new(400000, 400000, 400000)
     bg.CFrame = CFrame.new(torso.Position, torso.Position + workspace.CurrentCamera.CFrame.LookVector)
+    bg.Parent = torso
 
-    local bv = Instance.new("BodyVelocity", torso)
+    local bv = Instance.new("BodyVelocity")
     bv.velocity = Vector3.new(0, 0.1, 0)
     bv.maxForce = Vector3.new(400000, 400000, 400000)
+    bv.Parent = torso
 
     plr.Character.Humanoid.PlatformStand = true
 
     local speed = 0
     while flying and torso.Parent do
         task.wait()
+
+        -- Freeze all animations every frame
+        if humanoid then
+            for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+                track:Stop()
+            end
+            humanoid.Jump = false
+        end
+
+        -- Handle speed based on input
         if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
             speed = math.clamp(speed + FlySpeed * 0.1, 0, FlySpeed)
         else
             speed = math.clamp(speed - FlySpeed * 0.1, 0, FlySpeed)
         end
 
+        -- Movement velocity calculation
         if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
             bv.velocity = ((workspace.CurrentCamera.CFrame.LookVector * (ctrl.f + ctrl.b)) +
                 ((workspace.CurrentCamera.CFrame * CFrame.new(ctrl.l + ctrl.r, (ctrl.f + ctrl.b) * 0.2, 0).p) - workspace.CurrentCamera.CFrame.p)) * speed
@@ -2710,12 +2725,16 @@ local function Fly()
             bv.velocity = Vector3.new(0, 0.1, 0)
         end
 
+        -- Keep camera-facing rotation
         bg.CFrame = CFrame.new(torso.Position, torso.Position + workspace.CurrentCamera.CFrame.LookVector)
     end
 
+    -- Cleanup
     bg:Destroy()
     bv:Destroy()
-    plr.Character.Humanoid.PlatformStand = false
+    if humanoid then
+        plr.Character.Humanoid.PlatformStand = false
+    end
     flyThreadRunning = false
 end
 
