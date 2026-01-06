@@ -953,7 +953,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Added Face Bang Speed"
+Announce_Label.Text = "Added Face Bang Fixed Plate Cliping And Adjusted Stand"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -3223,7 +3223,6 @@ FaceTarget_Button.MouseButton1Click:Connect(function()
 	local baseDistance = 1.1
 	local thrustDistance = 0.6
 	local yOffset = 0.7
-	local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
 
 	repeat
 		pcall(function()
@@ -3232,7 +3231,11 @@ FaceTarget_Button.MouseButton1Click:Connect(function()
 			local targetRoot = targetChar and targetChar:FindFirstChild("HumanoidRootPart")
 			local targetHead = targetChar and targetChar:FindFirstChild("Head")
 
-			if not (myRoot and targetRoot and targetHead and humanoid) then return end
+			for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+				track:Stop()
+			end
+
+			if not (myRoot and targetRoot and targetHead) then return end
 
 			local thrust = math.sin(tick() * FaceSpeed) * thrustDistance
 
@@ -3243,7 +3246,10 @@ FaceTarget_Button.MouseButton1Click:Connect(function()
 			).Unit
 
 			local rotatedLook = -targetLook
-			local finalPos = targetHead.Position + Vector3.new(0, yOffset, 0)
+
+			local finalPos =
+				targetHead.Position
+				+ Vector3.new(0, yOffset, 0)
 				- rotatedLook * (baseDistance + thrust)
 
 			myRoot.CFrame = CFrame.new(finalPos, finalPos + rotatedLook)
@@ -3253,7 +3259,6 @@ FaceTarget_Button.MouseButton1Click:Connect(function()
 		task.wait()
 	until FaceTarget_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(255,0,0)
 end)
-
 
 HeadsitTarget_Button.MouseButton1Click:Connect(function()
 	if TargetedPlayer ~= nil then
