@@ -953,7 +953,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Removed Face Bang Temporarily"
+Announce_Label.Text = "ReMoved Face Bang And Fixed Plate Cliping"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -3231,6 +3231,7 @@ StandTarget_Button.MouseButton1Click:Connect(function()
 	if TargetedPlayer ~= nil then
 		ChangeToggleColor(StandTarget_Button)
 		if StandTarget_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(0,255,0) then
+			PlayAnim(13823324057,4,0)
 			repeat
 				pcall(function()
 					if not GetRoot(plr):FindFirstChild("BreakVelocity") then
