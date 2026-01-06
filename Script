@@ -1,10 +1,13 @@
 --RELOAD GUI
+
 if game.CoreGui:FindFirstChild("SysBroker") then
 	game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Echo",Text = "GUI Already loaded, rejoin to re-execute",Duration = 5;})
 	return
 end
 local version = 2
+
 --VARIABLES
+
 _G.AntiFlingToggled = false
 local Players = game:GetService("Players")
 local plr = Players.LocalPlayer
@@ -32,7 +35,9 @@ pcall(function()
 		end
 	end
 end)
+
 --FUNCTIONS
+
 _G.shield = function(id)
 	if not table.find(ForceWhitelist,id) then
 		table.insert(ForceWhitelist, id)
@@ -251,6 +256,7 @@ local function SendNotify(title, message, duration)
 end
 
 --LOAD GUI
+
 task.wait(0.1)
 local SysBroker = Instance.new("ScreenGui")
 local Background = Instance.new("ImageLabel")
@@ -335,14 +341,12 @@ local PirateAnim_Button = Instance.new("TextButton")
 local SneakyAnim_Button = Instance.new("TextButton")
 local ToyAnim_Button = Instance.new("TextButton")
 local KnightAnim_Button = Instance.new("TextButton")
---NEWS
 local ConfidentAnim_Button = Instance.new("TextButton")
 local PopstarAnim_Button = Instance.new("TextButton")
 local PrincessAnim_Button = Instance.new("TextButton")
 local CowboyAnim_Button = Instance.new("TextButton")
 local PatrolAnim_Button = Instance.new("TextButton")
 local ZombieFEAnim_Button = Instance.new("TextButton")
---NEWS
 local Misc_Section = Instance.new("ScrollingFrame")
 local AntiFling_Button = Instance.new("TextButton")
 local AntiChatSpy_Button = Instance.new("TextButton")
@@ -2151,6 +2155,7 @@ local function ToggleFling(bool)
 end
 
 --CHANGE SECTION BUTTONS
+
 ChangeSection(Home_Section_Button)
 Home_Section_Button.MouseButton1Click:Connect(function()
 	ChangeSection(Home_Section_Button)
@@ -2181,6 +2186,7 @@ Credits_Section_Button.MouseButton1Click:Connect(function()
 end)
 
 --GAME SECTION BUTTONS
+
 AntiRagdollFunction = nil
 AntiRagdoll_Button.MouseButton1Click:Connect(function()
 	ChangeToggleColor(AntiRagdoll_Button)
@@ -2652,6 +2658,7 @@ FlyWButton.MouseButton1Up:Connect(function ()
 end)
 
 --TARGET
+
 ClickTargetTool_Button.MouseButton1Click:Connect(function()
 	local GetTargetTool = Instance.new("Tool")
 	GetTargetTool.Name = "ClickTarget"
@@ -3159,7 +3166,6 @@ KnightAnim_Button.MouseButton1Click:Connect(function()
 	Animate.Disabled = false
 end)
 
---NEWS
 ConfidentAnim_Button.MouseButton1Click:Connect(function()
 	local Animate = plr.Character.Animate
 	Animate.Disabled = true
@@ -3402,6 +3408,7 @@ Serverhop_Button.MouseButton1Click:Connect(function()
 end)
 
 --GUI Functions
+
 Players.PlayerRemoving:Connect(function(player)
 	pcall(function()
 		if player.Name == TargetedPlayer then
@@ -3451,12 +3458,12 @@ plr.CharacterAdded:Connect(function(x)
 	local appearance = players:GetCharacterAppearanceAsync(plr.UserId)
 	local original_accs = {}
 	local accs = {}
-	for i,acc in pairs(appearance:GetChildren()) do --Save original accessoryes
+	for i,acc in pairs(appearance:GetChildren()) do
 		if acc:IsA("Accessory") then
 			table.insert(original_accs, acc.Name)
 		end
 	end
-	for i,acc in pairs(plr.Character:GetChildren()) do --Save player accessoryes
+	for i,acc in pairs(plr.Character:GetChildren()) do
 		if acc:IsA("Accessory") then
 			table.insert(accs, acc.Name)
 		end
