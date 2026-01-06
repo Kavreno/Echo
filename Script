@@ -3163,6 +3163,72 @@ BenxTarget_Button.MouseButton1Click:Connect(function()
 	end
 end)
 
+FaceTarget_Button.MouseButton1Click:Connect(function()
+	if TargetedPlayer ~= nil then
+		ChangeToggleColor(FaceTarget_Button)
+
+		if FaceTarget_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(0,255,0) then
+
+			local baseDistance = 1.1   -- distance in front of target
+			local thrustDistance = 0.6 -- forward/back motion depth
+			local thrustSpeed = 8      -- speed of back/forth
+			local yOffset = 0.5        -- slightly above head
+
+			local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
+
+			repeat
+				pcall(function()
+					local myRoot = GetRoot(plr)
+					local targetChar = Players[TargetedPlayer].Character
+					local targetRoot = targetChar and targetChar:FindFirstChild("HumanoidRootPart")
+					local targetHead = targetChar and targetChar:FindFirstChild("Head")
+
+					if not (myRoot and targetRoot and targetHead and humanoid) then return end
+
+					-- Stop idle animations
+					for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+						track:Stop()
+					end
+
+					-- Break velocity
+					if not myRoot:FindFirstChild("BreakVelocity") then
+						local TempV = Velocity_Asset:Clone()
+						TempV.Parent = myRoot
+					end
+
+					-- Direction based on target rotation
+					local targetLook = Vector3.new(targetRoot.CFrame.LookVector.X, 0, targetRoot.CFrame.LookVector.Z).Unit
+
+					-- Rotate 180° to face “mirror” direction
+					local rotatedLook = -targetLook
+
+					-- Back & forth thrust
+					local thrust = math.sin(tick() * thrustSpeed) * thrustDistance
+
+					-- Final position: slightly above head + thrust in front
+					local finalPos = targetHead.Position + Vector3.new(0, yOffset, 0) - rotatedLook * (baseDistance + thrust)
+
+					-- Apply rotation (mirror 180°)
+					local lookAtPos = finalPos + rotatedLook
+
+					myRoot.CFrame = CFrame.new(finalPos, lookAtPos)
+
+					-- Stop velocity drift
+					myRoot.Velocity = Vector3.new(0,0,0)
+				end)
+
+				task.wait()
+			until FaceTarget_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(255,0,0)
+
+			-- Cleanup
+			if GetRoot(plr):FindFirstChild("BreakVelocity") then
+				GetRoot(plr).BreakVelocity:Destroy()
+			end
+		end
+	end
+end)
+
+
 HeadsitTarget_Button.MouseButton1Click:Connect(function()
 	if TargetedPlayer ~= nil then
 		ChangeToggleColor(HeadsitTarget_Button)
