@@ -4,7 +4,7 @@ if game.CoreGui:FindFirstChild("SysBroker") then
 	game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Echo",Text = "GUI Already loaded, rejoin to re-execute",Duration = 5;})
 	return
 end
-local version = 3
+local version = 2
 
 --VARIABLES
 
@@ -941,7 +941,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Added Teleport Binding And Better Teleport Thanks to Infinite Yield Script And Fly Binding. Will Be Making Plate Gen Again"
+Announce_Label.Text = "Added Unbinding For Teleport And Fly. Working On Plate Gen"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -2595,12 +2595,17 @@ end
 FlyKey_Button.MouseButton1Click:Connect(function()
     pcall(function()
         local keyText = FlyKey_Input.Text
-        local keyEnum = StringToKeyCode(keyText)
-        if keyEnum then
-            FlyToggleKey = keyEnum
-            SendNotify("Echo","Fly toggle key updated to "..keyEnum.Name,5)
+        if keyText == "" then
+            FlyToggleKey = nil
+            SendNotify("Echo","Fly toggle key unbound.",5)
         else
-            SendNotify("Echo","Invalid key entered.",5)
+            local keyEnum = StringToKeyCode(keyText)
+            if keyEnum then
+                FlyToggleKey = keyEnum
+                SendNotify("Echo","Fly toggle key updated to "..keyEnum.Name,5)
+            else
+                SendNotify("Echo","Invalid key entered.",5)
+            end
         end
     end)
 end)
@@ -2617,16 +2622,23 @@ local function StringToKeyCode(str)
 end
 
 TeleportKey_Button.MouseButton1Click:Connect(function()
-	pcall(function()
-		local keyText = TeleportKey_Input.Text
-		local keyEnum = StringToKeyCode(keyText)
-		if keyEnum then
-			HoldKey = keyEnum
-			SendNotify("Echo","Teleport key updated to "..keyEnum.Name,5)
-		else
-			SendNotify("Echo","Invalid key entered.",5)
-		end
-	end)
+	local keyText = TeleportKey_Input.Text
+
+	if keyText == "" or not keyText then
+		HoldKey = nil
+		holdKeyPressed = false
+		SendNotify("Echo","Teleport key unbound",5)
+		return
+	end
+
+	local keyEnum = StringToKeyCode(keyText)
+	if keyEnum then
+		HoldKey = keyEnum
+		holdKeyPressed = false
+		SendNotify("Echo","Teleport key updated to "..keyEnum.Name,5)
+	else
+		SendNotify("Echo","Invalid key entered.",5)
+	end
 end)
 
 Respawn_Button.MouseButton1Click:Connect(function()
@@ -2723,16 +2735,20 @@ end
 
 game:GetService("UserInputService").InputBegan:Connect(function(input, gpe)
     if gpe then return end
-    if FlyToggleKey and input.UserInputType==Enum.UserInputType.Keyboard and input.KeyCode==FlyToggleKey then
-        ChangeToggleColor(Fly_Button)
+    if FlyToggleKey and input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == FlyToggleKey then
         flying = not flying
+        ChangeToggleColor(Fly_Button)
         Fly_Pad.Visible = flying and game:GetService("UserInputService").TouchEnabled or false
+
         if flying then
             ConnectFlyKeys()
             task.spawn(Fly)
         else
             DisconnectFlyKeys()
             StopAnim()
+            ctrl = {f=0,b=0,l=0,r=0}
+            lastctrl = {f=0,b=0,l=0,r=0}
+            speed = 0
         end
     end
 end)
@@ -2748,40 +2764,46 @@ Fly_Button.MouseButton1Click:Connect(function()
     else
         DisconnectFlyKeys()
         StopAnim()
+        ctrl = {f=0,b=0,l=0,r=0}
+        lastctrl = {f=0,b=0,l=0,r=0}
+        speed = 0
     end
 end)
 
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
-local IYMouse = Players.LocalPlayer:GetMouse()
-local getRoot = function(character)
-	return character:FindFirstChild("HumanoidRootPart")
+local LocalPlayer = Players.LocalPlayer
+
+local getRoot = function(char)
+	return char:FindFirstChild("HumanoidRootPart")
 end
 
 local holdKeyPressed = false
 
+local IYMouse = LocalPlayer:GetMouse()
+
 local function clicktpFunc()
-	pcall(function()
-		local character = Players.LocalPlayer.Character
-		if not character then return end
-		local humanoid = character:FindFirstChildOfClass("Humanoid")
-		if humanoid and humanoid.SeatPart then
-			humanoid.Sit = false
-			wait(0.1)
-		end
+	local char = LocalPlayer.Character
+	if not char then return end
+	local humanoid = char:FindFirstChildOfClass("Humanoid")
+	if humanoid and humanoid.SeatPart then
+		humanoid.Sit = false
+		wait(0.1)
+	end
 
-		local hipHeight = humanoid and humanoid.HipHeight > 0 and (humanoid.HipHeight + 1)
-		local rootPart = getRoot(character)
-		if not rootPart then return end
-		local rootPartPosition = rootPart.Position
-		local hitPosition = IYMouse.Hit.Position
-		local newCFrame = CFrame.new(
-			hitPosition, 
-			Vector3.new(rootPartPosition.X, hitPosition.Y, rootPartPosition.Z)
-		) * CFrame.Angles(0, math.pi, 0)
+	local hipHeight = humanoid and humanoid.HipHeight > 0 and (humanoid.HipHeight + 1)
+	local rootPart = getRoot(char)
+	if not rootPart then return end
 
-		rootPart.CFrame = newCFrame + Vector3.new(0, hipHeight or 4, 0)
-	end)
+	local rootPos = rootPart.Position
+	local hitPos = IYMouse.Hit.Position
+
+	local newCFrame = CFrame.new(
+		hitPos,
+		Vector3.new(rootPos.X, hitPos.Y, rootPos.Z)
+	) * CFrame.Angles(0, math.pi, 0)
+
+	rootPart.CFrame = newCFrame + Vector3.new(0, hipHeight or 4, 0)
 end
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -3499,8 +3521,8 @@ InfYield_Button.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
 end)
 
-CMDX_Button.MouseButton1Click:Connect(function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source",true))()
+CMDX_Button.MouseButton1Click:Connect(function()	
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source", true))()
 end)
 
 Explode_Button.MouseButton1Click:Connect(function()
