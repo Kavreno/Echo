@@ -958,7 +958,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Added All Missing Animation Packs"
+Announce_Label.Text = "Added Base Plate Generation On Script Load"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -4135,6 +4135,25 @@ Serverhop_Button.MouseButton1Click:Connect(function()
 		end
 	end
 end)
+
+local baseplate = Instance.new("Part")
+baseplate.Name = "MicUpBaseplate"
+baseplate.Anchored = true
+baseplate.CanCollide = true
+baseplate.Locked = true
+
+baseplate.Size = Vector3.new(8192, 1, 8192)
+
+baseplate.Position = Vector3.new(0, -0.6, -512)
+
+baseplate.Material = Enum.Material.Grass
+
+baseplate.Color = Color3.fromRGB(85, 175, 100)
+
+baseplate.TopSurface = Enum.SurfaceType.Smooth
+baseplate.BottomSurface = Enum.SurfaceType.Smooth
+
+baseplate.Parent = workspace
 
 --GUI Functions
 
