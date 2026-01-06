@@ -26,6 +26,7 @@ local SavedCheckpoint = nil
 local MinesFolder = nil
 local FreeEmotesEnabled = false
 local CannonsFolders = {}
+local FlyToggleKey = nil
 
 pcall(function()
 	MinesFolder = game:GetService("Workspace").Landmines
@@ -307,6 +308,8 @@ local SaveCheckpoint_Button = Instance.new("TextButton")
 local Respawn_Button = Instance.new("TextButton")
 local FlySpeed_Button = Instance.new("TextButton")
 local FlySpeed_Input = Instance.new("TextBox")
+local FlyKey_Button = Instance.new("TextButton")
+local FlyKey_Input = Instance.new("TextBox")
 local Fly_Button = Instance.new("TextButton")
 local Target_Section = Instance.new("ScrollingFrame")
 local TargetImage = Instance.new("ImageLabel")
@@ -935,7 +938,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Broke Script ReWriting All The Code :("
+Announce_Label.Text = "Readded my fly Keybinding and teleport is not rebindable but is bound to q by default!"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -991,7 +994,7 @@ ClearCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 ClearCheckpoint_Button.BackgroundTransparency = 0.500
 ClearCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ClearCheckpoint_Button.BorderSizePixel = 0
-ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 225)
+ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 275)
 ClearCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 ClearCheckpoint_Button.Font = Enum.Font.Oswald
 ClearCheckpoint_Button.Text = "Clear checkpoint"
@@ -1036,7 +1039,7 @@ SaveCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 SaveCheckpoint_Button.BackgroundTransparency = 0.500
 SaveCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SaveCheckpoint_Button.BorderSizePixel = 0
-SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 175)
+SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 225)
 SaveCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 SaveCheckpoint_Button.Font = Enum.Font.Oswald
 SaveCheckpoint_Button.Text = "Save checkpoint"
@@ -1051,7 +1054,7 @@ Respawn_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 Respawn_Button.BackgroundTransparency = 0.500
 Respawn_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Respawn_Button.BorderSizePixel = 0
-Respawn_Button.Position = UDim2.new(0, 25, 0, 225)
+Respawn_Button.Position = UDim2.new(0, 25, 0, 275)
 Respawn_Button.Size = UDim2.new(0, 150, 0, 30)
 Respawn_Button.Font = Enum.Font.Oswald
 Respawn_Button.Text = "Respawn"
@@ -1090,13 +1093,43 @@ FlySpeed_Input.TextColor3 = Color3.fromRGB(20, 20, 20)
 FlySpeed_Input.TextSize = 14.000
 FlySpeed_Input.TextWrapped = true
 
+FlyKey_Button.Name = "FlyKey_Button"
+FlyKey_Button.Parent = Character_Section
+FlyKey_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+FlyKey_Button.BackgroundTransparency = 0.500
+FlyKey_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FlyKey_Button.BorderSizePixel = 0
+FlyKey_Button.Position = UDim2.new(0, 25, 0, 175)
+FlyKey_Button.Size = UDim2.new(0, 150, 0, 30)
+FlyKey_Button.Font = Enum.Font.Oswald
+FlyKey_Button.Text = "Fly key"
+FlyKey_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+FlyKey_Button.TextScaled = true
+FlyKey_Button.TextSize = 14.000
+FlyKey_Button.TextWrapped = true
+
+FlyKey_Input.Name = "FlyKey_Input"
+FlyKey_Input.Parent = Character_Section
+FlyKey_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+FlyKey_Input.BackgroundTransparency = 0.300
+FlyKey_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
+FlyKey_Input.Position = UDim2.new(0, 210, 0, 175)
+FlyKey_Input.Size = UDim2.new(0, 175, 0, 30)
+FlyKey_Input.Font = Enum.Font.Gotham
+FlyKey_Input.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
+FlyKey_Input.PlaceholderText = "Press Any Letter"
+FlyKey_Input.Text = ""
+FlyKey_Input.TextColor3 = Color3.fromRGB(20, 20, 20)
+FlyKey_Input.TextSize = 14.000
+FlyKey_Input.TextWrapped = true
+
 Fly_Button.Name = "Fly_Button"
 Fly_Button.Parent = Character_Section
 Fly_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 Fly_Button.BackgroundTransparency = 0.500
 Fly_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Fly_Button.BorderSizePixel = 0
-Fly_Button.Position = UDim2.new(0, 25, 0, 175)
+Fly_Button.Position = UDim2.new(0, 25, 0, 225)
 Fly_Button.Size = UDim2.new(0, 150, 0, 30)
 Fly_Button.Font = Enum.Font.Oswald
 Fly_Button.Text = "Fly"
@@ -2033,6 +2066,7 @@ CreateClicker(JumpPower_Button)
 CreateClicker(SaveCheckpoint_Button)
 CreateClicker(Respawn_Button)
 CreateClicker(FlySpeed_Button)
+CreateClicker(FlyKey_Button)
 
 CreateToggle(ViewTarget_Button)
 CreateToggle(FlingTarget_Button)
@@ -2516,6 +2550,26 @@ FlySpeed_Button.MouseButton1Click:Connect(function()
 	end)
 end)
 
+local function StringToKeyCode(str)
+    str = str:upper()
+    local success, key = pcall(function() return Enum.KeyCode[str] end)
+    if success and key then return key end
+    return nil
+end
+
+FlyKey_Button.MouseButton1Click:Connect(function()
+    pcall(function()
+        local keyText = FlyKey_Input.Text
+        local keyEnum = StringToKeyCode(keyText)
+        if keyEnum then
+            FlyToggleKey = keyEnum
+            SendNotify("Echo","Fly toggle key updated to "..keyEnum.Name,5)
+        else
+            SendNotify("Echo","Invalid key entered.",5)
+        end
+    end)
+end)
+
 Respawn_Button.MouseButton1Click:Connect(function()
 	local RsP = GetRoot(plr).Position
 	plr.Character.Humanoid.Health = 0
@@ -2533,128 +2587,158 @@ ClearCheckpoint_Button.MouseButton1Click:Connect(function()
 	SendNotify("Echo","Checkpoint cleared.",5)
 end)
 
-local flying = true
-local deb = true
+local flying = false
 local ctrl = {f = 0, b = 0, l = 0, r = 0}
 local lastctrl = {f = 0, b = 0, l = 0, r = 0}
-local KeyDownFunction = nil
-local KeyUpFunction = nil
+local KeyDownFunction, KeyUpFunction
+local flyThreadRunning = false
+
+local function Fly()
+    if flyThreadRunning then return end
+    flyThreadRunning = true
+
+    local UpperTorso = plr.Character:WaitForChild("UpperTorso")
+    local bg = Instance.new("BodyGyro", UpperTorso)
+    bg.P = 9e4
+    bg.maxTorque = Vector3.new(9e9,9e9,9e9)
+    bg.CFrame = CFrame.new(UpperTorso.Position, UpperTorso.Position + workspace.CurrentCamera.CFrame.LookVector)
+
+    local bv = Instance.new("BodyVelocity", UpperTorso)
+    bv.velocity = Vector3.new(0,0.1,0)
+    bv.maxForce = Vector3.new(9e9,9e9,9e9)
+
+    plr.Character.Humanoid.PlatformStand = true
+
+    local speed = 0
+    while flying and UpperTorso.Parent do
+        task.wait()
+        if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+            speed = math.clamp(speed + FlySpeed*0.1, 0, FlySpeed)
+        else
+            speed = math.clamp(speed - FlySpeed*0.1, 0, FlySpeed)
+        end
+
+        if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+            bv.velocity = ((workspace.CurrentCamera.CFrame.LookVector*(ctrl.f+ctrl.b)) +
+                ((workspace.CurrentCamera.CFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*0.2,0).p) - workspace.CurrentCamera.CFrame.p)) * speed
+            lastctrl = {f=ctrl.f,b=ctrl.b,l=ctrl.l,r=ctrl.r}
+        elseif speed ~= 0 then
+            bv.velocity = ((workspace.CurrentCamera.CFrame.LookVector*(lastctrl.f+lastctrl.b)) +
+                ((workspace.CurrentCamera.CFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*0.2,0).p) - workspace.CurrentCamera.CFrame.p)) * speed
+        else
+            bv.velocity = Vector3.new(0,0.1,0)
+        end
+
+        bg.CFrame = CFrame.new(UpperTorso.Position, UpperTorso.Position + workspace.CurrentCamera.CFrame.LookVector)
+    end
+
+    bg:Destroy()
+    bv:Destroy()
+    plr.Character.Humanoid.PlatformStand = false
+    flyThreadRunning = false
+end
+
+local function ConnectFlyKeys()
+    KeyDownFunction = mouse.KeyDown:Connect(function(key)
+        key = key:lower()
+        if key=="w" then ctrl.f=1
+        elseif key=="s" then ctrl.b=-1
+        elseif key=="a" then ctrl.l=-1
+        elseif key=="d" then ctrl.r=1
+        end
+    end)
+    KeyUpFunction = mouse.KeyUp:Connect(function(key)
+        key = key:lower()
+        if key=="w" then ctrl.f=0
+        elseif key=="s" then ctrl.b=0
+        elseif key=="a" then ctrl.l=0
+        elseif key=="d" then ctrl.r=0
+        end
+    end)
+end
+
+local function DisconnectFlyKeys()
+    if KeyDownFunction then KeyDownFunction:Disconnect() end
+    if KeyUpFunction then KeyUpFunction:Disconnect() end
+end
+
+game:GetService("UserInputService").InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if FlyToggleKey and input.UserInputType==Enum.UserInputType.Keyboard and input.KeyCode==FlyToggleKey then
+        ChangeToggleColor(Fly_Button)
+        flying = not flying
+        Fly_Pad.Visible = flying and game:GetService("UserInputService").TouchEnabled or false
+        if flying then
+            ConnectFlyKeys()
+            task.spawn(Fly)
+        else
+            DisconnectFlyKeys()
+            StopAnim()
+        end
+    end
+end)
+
 Fly_Button.MouseButton1Click:Connect(function()
-	ChangeToggleColor(Fly_Button)
-	if Fly_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(0,255,0) then
-		flying = true
-		if game:GetService("UserInputService").TouchEnabled then
-			Fly_Pad.Visible = true
-		end
-		local UpperTorso = plr.Character.UpperTorso
-		local speed = 0
-		local function Fly()
-			local bg = Instance.new("BodyGyro", UpperTorso)
-			bg.P = 9e4
-			bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
-			bg.cframe = UpperTorso.CFrame
-			local bv = Instance.new("BodyVelocity", UpperTorso)
-			bv.velocity = Vector3.new(0,0.1,0)
-			bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
-			PlayAnim(10714347256,4,0)
-			repeat task.wait()
-				plr.Character.Humanoid.PlatformStand = true
-				if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
-					speed = speed+FlySpeed*0.10
-					if speed > FlySpeed then
-						speed = FlySpeed
-					end
-				elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
-					speed = speed-FlySpeed*0.10
-					if speed < 0 then
-						speed = 0
-					end
-				end
-				if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
-					bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
-					lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
-				elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
-					bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
-				else
-					bv.velocity = Vector3.new(0,0.1,0)
-				end
-				bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/FlySpeed),0,0)
-			until not flying
-			ctrl = {f = 0, b = 0, l = 0, r = 0}
-			lastctrl = {f = 0, b = 0, l = 0, r = 0}
-			speed = 0
-			bg:Destroy()
-			bv:Destroy()
-			plr.Character.Humanoid.PlatformStand = false
+    flying = not flying
+    ChangeToggleColor(Fly_Button)
+    Fly_Pad.Visible = flying and game:GetService("UserInputService").TouchEnabled or false
+
+    if flying then
+        ConnectFlyKeys()
+        task.spawn(Fly)
+    else
+        DisconnectFlyKeys()
+        StopAnim()
+    end
+end)
+
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local IYMouse = Players.LocalPlayer:GetMouse()
+local getRoot = function(character)
+	return character:FindFirstChild("HumanoidRootPart")
+end
+
+local holdQ = false
+
+local function clicktpFunc()
+	pcall(function()
+		local character = Players.LocalPlayer.Character
+		local humanoid = character:FindFirstChildOfClass("Humanoid")
+		if humanoid and humanoid.SeatPart then
+			humanoid.Sit = false
+			wait(0.1)
 		end
 
-		KeyDownFunction = mouse.KeyDown:connect(function(key)
-			if key:lower() == "w" then
-				ctrl.f = 1
-				PlayAnim(10714177846,4.65,0)
-			elseif key:lower() == "s" then
-				ctrl.b = -1
-				PlayAnim(10147823318,4.11,0)
-			elseif key:lower() == "a" then
-				ctrl.l = -1
-				PlayAnim(10147823318,3.55,0)
-			elseif key:lower() == "d" then
-				ctrl.r = 1
-				PlayAnim(10147823318,4.81,0)
-			end
-		end)
+		local hipHeight = humanoid and humanoid.HipHeight > 0 and (humanoid.HipHeight + 1)
+		local rootPart = getRoot(character)
+		local rootPartPosition = rootPart.Position
+		local hitPosition = IYMouse.Hit.Position
+		local newCFrame = CFrame.new(
+			hitPosition, 
+			Vector3.new(rootPartPosition.X, hitPosition.Y, rootPartPosition.Z)
+		) * CFrame.Angles(0, math.pi, 0)
 
-		KeyUpFunction = mouse.KeyUp:connect(function(key)
-			if key:lower() == "w" then
-				ctrl.f = 0
-				PlayAnim(10714347256,4,0)
-			elseif key:lower() == "s" then
-				ctrl.b = 0
-				PlayAnim(10714347256,4,0)
-			elseif key:lower() == "a" then
-				ctrl.l = 0
-				PlayAnim(10714347256,4,0)
-			elseif key:lower() == "d" then
-				ctrl.r = 0
-				PlayAnim(10714347256,4,0)
-			end
-		end)
-		Fly()
-	else
-		flying = false
-		Fly_Pad.Visible = false
-		KeyDownFunction:Disconnect()
-		KeyUpFunction:Disconnect()
-		StopAnim()
+		rootPart.CFrame = newCFrame + Vector3.new(0, hipHeight or 4, 0)
+	end)
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if input.KeyCode == Enum.KeyCode.Q then
+		holdQ = true
 	end
 end)
 
-FlyAButton.MouseButton1Down:Connect(function()
-	keypress("0x41")
-end)
-FlyAButton.MouseButton1Up:Connect(function ()
-	keyrelease("0x41")
-end)
-
-FlySButton.MouseButton1Down:Connect(function()
-	keypress("0x53")
-end)
-FlySButton.MouseButton1Up:Connect(function ()
-	keyrelease("0x53")
+UserInputService.InputEnded:Connect(function(input, gameProcessed)
+	if input.KeyCode == Enum.KeyCode.Q then
+		holdQ = false
+	end
 end)
 
-FlyDButton.MouseButton1Down:Connect(function()
-	keypress("0x44")
-end)
-FlyDButton.MouseButton1Up:Connect(function ()
-	keyrelease("0x44")
-end)
-
-FlyWButton.MouseButton1Down:Connect(function()
-	keypress("0x57")
-end)
-FlyWButton.MouseButton1Up:Connect(function ()
-	keyrelease("0x57")
+IYMouse.Button1Down:Connect(function()
+	if holdQ then
+		clicktpFunc()
+	end
 end)
 
 --TARGET
