@@ -1,9 +1,12 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
 --RELOAD GUI
 if game.CoreGui:FindFirstChild("SysBroker") then
-	game:GetService("StarterGui")
+	game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Echo",Text = "GUI Already loaded, rejoin to re-execute",Duration = 5;})
 	return
 end
-local version = 4
+local version = 2
 --VARIABLES
 _G.AntiFlingToggled = false
 local Players = game:GetService("Players")
@@ -12,26 +15,17 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Light = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
-local player = game.Players.LocalPlayer
-local mouse = player:GetMouse()
-local uis = game:GetService("UserInputService")
-local workspace = game:GetService("Workspace")
 local httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 local mouse = plr:GetMouse()
 local ScriptWhitelist = {}
 local ForceWhitelist = {}
 local TargetedPlayer = nil
-local TELEPORT_KEY = nil
-local PlateGenEnabled = false
-local FlyKey = nil
 local FlySpeed = 50
-local FaceSpeed = 12
 local PotionTool = nil
 local SavedCheckpoint = nil
 local MinesFolder = nil
+local FreeEmotesEnabled = false
 local CannonsFolders = {}
-
---FUNCTIONS
 
 pcall(function()
 	MinesFolder = game:GetService("Workspace").Landmines
@@ -41,7 +35,7 @@ pcall(function()
 		end
 	end
 end)
-
+--FUNCTIONS
 _G.shield = function(id)
 	if not table.find(ForceWhitelist,id) then
 		table.insert(ForceWhitelist, id)
@@ -147,6 +141,7 @@ local function Touch(x,root)
 		end
 	end)
 end
+
 
 local function GetPush()
 	local TempPush = nil
@@ -309,12 +304,7 @@ local SaveCheckpoint_Button = Instance.new("TextButton")
 local Respawn_Button = Instance.new("TextButton")
 local FlySpeed_Button = Instance.new("TextButton")
 local FlySpeed_Input = Instance.new("TextBox")
-local FlyKeyBind_Input = Instance.new("TextBox")
-local FlyKeyBind_Button = Instance.new("TextButton")
-local TeleportKeyBind_Input = Instance.new("TextBox")
-local TeleportKeyBind_Button = Instance.new("TextButton")
 local Fly_Button = Instance.new("TextButton")
-local PlateGen_Button = Instance.new("TextButton")
 local Target_Section = Instance.new("ScrollingFrame")
 local TargetImage = Instance.new("ImageLabel")
 local ClickTargetTool_Button = Instance.new("ImageButton")
@@ -324,11 +314,8 @@ local ViewTarget_Button = Instance.new("TextButton")
 local FlingTarget_Button = Instance.new("TextButton")
 local FocusTarget_Button = Instance.new("TextButton")
 local BenxTarget_Button = Instance.new("TextButton")
-local FaceTarget_Button = Instance.new("TextButton")
 local PushTarget_Button = Instance.new("TextButton")
 local WhitelistTarget_Button = Instance.new("TextButton")
-local FaceSpeed_Input = Instance.new("TextBox")
-local FaceSpeed_Button = Instance.new("TextButton")
 local TeleportTarget_Button = Instance.new("TextButton")
 local HeadsitTarget_Button = Instance.new("TextButton")
 local StandTarget_Button = Instance.new("TextButton")
@@ -358,10 +345,6 @@ local PrincessAnim_Button = Instance.new("TextButton")
 local CowboyAnim_Button = Instance.new("TextButton")
 local PatrolAnim_Button = Instance.new("TextButton")
 local ZombieFEAnim_Button = Instance.new("TextButton")
-local AuraAnim_Button = Instance.new("TextButton")
-local CommunityAnim_Button = Instance.new("TextButton")
-local OldAnim_Button = Instance.new("TextButton")
-local PopularAnim_Button = Instance.new("TextButton")
 --NEWS
 local Misc_Section = Instance.new("ScrollingFrame")
 local AntiFling_Button = Instance.new("TextButton")
@@ -371,12 +354,15 @@ local Shaders_Button = Instance.new("TextButton")
 local Day_Button = Instance.new("TextButton")
 local Night_Button = Instance.new("TextButton")
 local Rejoin_Button = Instance.new("TextButton")
+local CMDX_Button = Instance.new("TextButton")
 local InfYield_Button = Instance.new("TextButton")
 local Serverhop_Button = Instance.new("TextButton")
 local Explode_Button = Instance.new("TextButton")
+local FreeEmotes_Button = Instance.new("TextButton")
+local ChatBox_Input = Instance.new("TextBox")
 local Credits_Section = Instance.new("ScrollingFrame")
 local Credits_Label = Instance.new("TextLabel")
-
+local Crown = Instance.new("ImageLabel")
 local Assets = Instance.new("Folder")
 local Ticket_Asset = Instance.new("ImageButton")
 local Click_Asset = Instance.new("ImageButton")
@@ -387,6 +373,7 @@ local FlyAButton = Instance.new("TextButton")
 local FlyDButton = Instance.new("TextButton")
 local FlyWButton = Instance.new("TextButton")
 local FlySButton = Instance.new("TextButton")
+local OpenClose = Instance.new("ImageButton")
 local UICornerOC = Instance.new("UICorner")
 
 local function CreateToggle(Button)
@@ -406,8 +393,8 @@ SysBroker.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 Background.Name = "Background"
 Background.Parent = SysBroker
 Background.AnchorPoint = Vector2.new(0.5, 0.5)
-Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Background.BorderColor3 = Color3.fromRGB(100, 100, 100)
+Background.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Background.BorderColor3 = Color3.fromRGB(0, 255, 255)
 Background.Position = UDim2.new(0.5, 0, 0.5, 0)
 Background.Size = UDim2.new(0, 500, 0, 350)
 Background.ZIndex = 9
@@ -429,7 +416,7 @@ TitleBarLabel.BorderSizePixel = 0
 TitleBarLabel.Size = UDim2.new(1, 0, 0, 30)
 TitleBarLabel.Font = Enum.Font.Unknown
 TitleBarLabel.Text = "Echo"
-TitleBarLabel.TextColor3 = Color3.fromRGB(100, 100, 100)
+TitleBarLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
 TitleBarLabel.TextScaled = true
 TitleBarLabel.TextSize = 14.000
 TitleBarLabel.TextWrapped = true
@@ -446,7 +433,7 @@ SectionList.Size = UDim2.new(0, 105, 0, 320)
 
 Home_Section_Button.Name = "Home_Section_Button"
 Home_Section_Button.Parent = SectionList
-Home_Section_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Home_Section_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Home_Section_Button.BackgroundTransparency = 0.500
 Home_Section_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Home_Section_Button.BorderSizePixel = 0
@@ -461,7 +448,7 @@ Home_Section_Button.TextWrapped = true
 
 Game_Section_Button.Name = "Game_Section_Button"
 Game_Section_Button.Parent = SectionList
-Game_Section_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Game_Section_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Game_Section_Button.BackgroundTransparency = 0.500
 Game_Section_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Game_Section_Button.BorderSizePixel = 0
@@ -476,7 +463,7 @@ Game_Section_Button.TextWrapped = true
 
 Character_Section_Button.Name = "Character_Section_Button"
 Character_Section_Button.Parent = SectionList
-Character_Section_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Character_Section_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Character_Section_Button.BackgroundTransparency = 0.500
 Character_Section_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Character_Section_Button.BorderSizePixel = 0
@@ -491,7 +478,7 @@ Character_Section_Button.TextWrapped = true
 
 Target_Section_Button.Name = "Target_Section_Button"
 Target_Section_Button.Parent = SectionList
-Target_Section_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Target_Section_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Target_Section_Button.BackgroundTransparency = 0.500
 Target_Section_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Target_Section_Button.BorderSizePixel = 0
@@ -506,7 +493,7 @@ Target_Section_Button.TextWrapped = true
 
 Animations_Section_Button.Name = "Animations_Section_Button"
 Animations_Section_Button.Parent = SectionList
-Animations_Section_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Animations_Section_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Animations_Section_Button.BackgroundTransparency = 0.500
 Animations_Section_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Animations_Section_Button.BorderSizePixel = 0
@@ -521,7 +508,7 @@ Animations_Section_Button.TextWrapped = true
 
 Misc_Section_Button.Name = "Misc_Section_Button"
 Misc_Section_Button.Parent = SectionList
-Misc_Section_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Misc_Section_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Misc_Section_Button.BackgroundTransparency = 0.500
 Misc_Section_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Misc_Section_Button.BorderSizePixel = 0
@@ -536,7 +523,7 @@ Misc_Section_Button.TextWrapped = true
 
 Credits_Section_Button.Name = "Credits_Section_Button"
 Credits_Section_Button.Parent = SectionList
-Credits_Section_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Credits_Section_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Credits_Section_Button.BackgroundTransparency = 0.500
 Credits_Section_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Credits_Section_Button.BorderSizePixel = 0
@@ -564,7 +551,7 @@ Game_Section.ScrollBarThickness = 5
 
 AntiRagdoll_Button.Name = "AntiRagdoll_Button"
 AntiRagdoll_Button.Parent = Game_Section
-AntiRagdoll_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+AntiRagdoll_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 AntiRagdoll_Button.BackgroundTransparency = 0.500
 AntiRagdoll_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 AntiRagdoll_Button.BorderSizePixel = 0
@@ -579,7 +566,7 @@ AntiRagdoll_Button.TextWrapped = true
 
 PotionFling_Button.Name = "PotionFling_Button"
 PotionFling_Button.Parent = Game_Section
-PotionFling_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PotionFling_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PotionFling_Button.BackgroundTransparency = 0.500
 PotionFling_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PotionFling_Button.BorderSizePixel = 0
@@ -594,7 +581,7 @@ PotionFling_Button.TextWrapped = true
 
 SpamMines_Button.Name = "SpamMines_Button"
 SpamMines_Button.Parent = Game_Section
-SpamMines_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+SpamMines_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 SpamMines_Button.BackgroundTransparency = 0.500
 SpamMines_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SpamMines_Button.BorderSizePixel = 0
@@ -609,7 +596,7 @@ SpamMines_Button.TextWrapped = true
 
 PushAura_Button.Name = "PushAura_Button"
 PushAura_Button.Parent = Game_Section
-PushAura_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PushAura_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PushAura_Button.BackgroundTransparency = 0.500
 PushAura_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PushAura_Button.BorderSizePixel = 0
@@ -624,7 +611,7 @@ PushAura_Button.TextWrapped = true
 
 BreakCannons_Button.Name = "BreakCannons_Button"
 BreakCannons_Button.Parent = Game_Section
-BreakCannons_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+BreakCannons_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 BreakCannons_Button.BackgroundTransparency = 0.500
 BreakCannons_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 BreakCannons_Button.BorderSizePixel = 0
@@ -639,7 +626,7 @@ BreakCannons_Button.TextWrapped = true
 
 LethalCannons_Button.Name = "LethalCannons_Button"
 LethalCannons_Button.Parent = Game_Section
-LethalCannons_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+LethalCannons_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 LethalCannons_Button.BackgroundTransparency = 0.500
 LethalCannons_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 LethalCannons_Button.BorderSizePixel = 0
@@ -654,7 +641,7 @@ LethalCannons_Button.TextWrapped = true
 
 ChatAlert_Button.Name = "ChatAlert_Button"
 ChatAlert_Button.Parent = Game_Section
-ChatAlert_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ChatAlert_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 ChatAlert_Button.BackgroundTransparency = 0.500
 ChatAlert_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ChatAlert_Button.BorderSizePixel = 0
@@ -669,7 +656,7 @@ ChatAlert_Button.TextWrapped = true
 
 PotionDi_Button.Name = "PotionDi_Button"
 PotionDi_Button.Parent = Game_Section
-PotionDi_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PotionDi_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PotionDi_Button.BackgroundTransparency = 0.500
 PotionDi_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PotionDi_Button.BorderSizePixel = 0
@@ -684,7 +671,7 @@ PotionDi_Button.TextWrapped = true
 
 VoidProtection_Button.Name = "VoidProtection_Button"
 VoidProtection_Button.Parent = Game_Section
-VoidProtection_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+VoidProtection_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 VoidProtection_Button.BackgroundTransparency = 0.500
 VoidProtection_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 VoidProtection_Button.BorderSizePixel = 0
@@ -699,7 +686,7 @@ VoidProtection_Button.TextWrapped = true
 
 PushAll_Button.Name = "PushAll_Button"
 PushAll_Button.Parent = Game_Section
-PushAll_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PushAll_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PushAll_Button.BackgroundTransparency = 0.500
 PushAll_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PushAll_Button.BorderSizePixel = 0
@@ -714,7 +701,7 @@ PushAll_Button.TextWrapped = true
 
 TouchFling_Button.Name = "TouchFling_Button"
 TouchFling_Button.Parent = Game_Section
-TouchFling_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+TouchFling_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 TouchFling_Button.BackgroundTransparency = 0.500
 TouchFling_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 TouchFling_Button.BorderSizePixel = 0
@@ -730,9 +717,9 @@ TouchFling_Button.TextWrapped = true
 CMDBar.Name = "CMDBar"
 CMDBar.Parent = Game_Section
 CMDBar.AnchorPoint = Vector2.new(0.5, 0.5)
-CMDBar.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+CMDBar.BackgroundColor3 = Color3.fromRGB(0, 140, 140)
 CMDBar.BackgroundTransparency = 0.300
-CMDBar.BorderColor3 = Color3.fromRGB(100, 100, 100)
+CMDBar.BorderColor3 = Color3.fromRGB(0, 255, 255)
 CMDBar.Position = UDim2.new(0.5, 0, 0, 350)
 CMDBar.Size = UDim2.new(0, 275, 0, 40)
 CMDBar.Font = Enum.Font.Gotham
@@ -745,7 +732,7 @@ CMDBar.TextWrapped = true
 
 CannonTP1_Button.Name = "CannonTP1_Button"
 CannonTP1_Button.Parent = Game_Section
-CannonTP1_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+CannonTP1_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 CannonTP1_Button.BackgroundTransparency = 0.500
 CannonTP1_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 CannonTP1_Button.BorderSizePixel = 0
@@ -760,7 +747,7 @@ CannonTP1_Button.TextWrapped = true
 
 CannonTP2_Button.Name = "CannonTP2_Button"
 CannonTP2_Button.Parent = Game_Section
-CannonTP2_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+CannonTP2_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 CannonTP2_Button.BackgroundTransparency = 0.500
 CannonTP2_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 CannonTP2_Button.BorderSizePixel = 0
@@ -775,7 +762,7 @@ CannonTP2_Button.TextWrapped = true
 
 CannonTP3_Button.Name = "CannonTP3_Button"
 CannonTP3_Button.Parent = Game_Section
-CannonTP3_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+CannonTP3_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 CannonTP3_Button.BackgroundTransparency = 0.500
 CannonTP3_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 CannonTP3_Button.BorderSizePixel = 0
@@ -790,7 +777,7 @@ CannonTP3_Button.TextWrapped = true
 
 MinefieldTP_Button.Name = "MinefieldTP_Button"
 MinefieldTP_Button.Parent = Game_Section
-MinefieldTP_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+MinefieldTP_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 MinefieldTP_Button.BackgroundTransparency = 0.500
 MinefieldTP_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 MinefieldTP_Button.BorderSizePixel = 0
@@ -805,7 +792,7 @@ MinefieldTP_Button.TextWrapped = true
 
 BallonTP_Button.Name = "BallonTP_Button"
 BallonTP_Button.Parent = Game_Section
-BallonTP_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+BallonTP_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 BallonTP_Button.BackgroundTransparency = 0.500
 BallonTP_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 BallonTP_Button.BorderSizePixel = 0
@@ -820,7 +807,7 @@ BallonTP_Button.TextWrapped = true
 
 NormalStairsTP_Button.Name = "NormalStairsTP_Button"
 NormalStairsTP_Button.Parent = Game_Section
-NormalStairsTP_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+NormalStairsTP_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 NormalStairsTP_Button.BackgroundTransparency = 0.500
 NormalStairsTP_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 NormalStairsTP_Button.BorderSizePixel = 0
@@ -835,7 +822,7 @@ NormalStairsTP_Button.TextWrapped = true
 
 MovingStairsTP_Button.Name = "MovingStairsTP_Button"
 MovingStairsTP_Button.Parent = Game_Section
-MovingStairsTP_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+MovingStairsTP_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 MovingStairsTP_Button.BackgroundTransparency = 0.500
 MovingStairsTP_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 MovingStairsTP_Button.BorderSizePixel = 0
@@ -850,7 +837,7 @@ MovingStairsTP_Button.TextWrapped = true
 
 SpiralStairsTP_Button.Name = "SpiralStairsTP_Button"
 SpiralStairsTP_Button.Parent = Game_Section
-SpiralStairsTP_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+SpiralStairsTP_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 SpiralStairsTP_Button.BackgroundTransparency = 0.500
 SpiralStairsTP_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SpiralStairsTP_Button.BorderSizePixel = 0
@@ -865,7 +852,7 @@ SpiralStairsTP_Button.TextWrapped = true
 
 SkyscraperTP_Button.Name = "SkyscraperTP_Button"
 SkyscraperTP_Button.Parent = Game_Section
-SkyscraperTP_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+SkyscraperTP_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 SkyscraperTP_Button.BackgroundTransparency = 0.500
 SkyscraperTP_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SkyscraperTP_Button.BorderSizePixel = 0
@@ -880,7 +867,7 @@ SkyscraperTP_Button.TextWrapped = true
 
 PoolTP_Button.Name = "PoolTP_Button"
 PoolTP_Button.Parent = Game_Section
-PoolTP_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PoolTP_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PoolTP_Button.BackgroundTransparency = 0.500
 PoolTP_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PoolTP_Button.BorderSizePixel = 0
@@ -895,7 +882,7 @@ PoolTP_Button.TextWrapped = true
 
 FreePushTool_Button.Name = "FreePushTool_Button"
 FreePushTool_Button.Parent = Game_Section
-FreePushTool_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+FreePushTool_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 FreePushTool_Button.BackgroundTransparency = 0.500
 FreePushTool_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 FreePushTool_Button.BorderSizePixel = 0
@@ -922,7 +909,7 @@ Home_Section.ScrollBarThickness = 5
 
 Profile_Image.Name = "Profile_Image"
 Profile_Image.Parent = Home_Section
-Profile_Image.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Profile_Image.BackgroundColor3 = Color3.fromRGB(30,30,30)
 Profile_Image.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Profile_Image.BorderSizePixel = 0
 Profile_Image.Position = UDim2.new(0, 25, 0, 25)
@@ -938,8 +925,8 @@ Welcome_Label.BorderSizePixel = 0
 Welcome_Label.Position = UDim2.new(0, 150, 0, 25)
 Welcome_Label.Size = UDim2.new(0, 200, 0, 100)
 Welcome_Label.Font = Enum.Font.SourceSans
-Welcome_Label.Text = ("Hello @"..plr.Name.."!\nPress [B] to open/close gui.")
-Welcome_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
+Welcome_Label.Text = ("¡Hello @"..plr.Name.."!\nPress [B] to open/close gui.")
+Welcome_Label.TextColor3 = Color3.fromRGB(0, 255, 255)
 Welcome_Label.TextSize = 24.000
 Welcome_Label.TextWrapped = true
 Welcome_Label.TextXAlignment = Enum.TextXAlignment.Left
@@ -947,14 +934,14 @@ Welcome_Label.TextYAlignment = Enum.TextYAlignment.Top
 
 Announce_Label.Name = "Announce_Label"
 Announce_Label.Parent = Home_Section
-Announce_Label.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Announce_Label.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Announce_Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "ReMoved Face Bang And Fixed Plate Cliping"
-Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
+Announce_Label.Text = "Broke Script ReWriting All The Code :("
+Announce_Label.TextColor3 = Color3.fromRGB(0, 255, 255)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
 Announce_Label.TextXAlignment = Enum.TextXAlignment.Left
@@ -970,12 +957,12 @@ Character_Section.BorderSizePixel = 0
 Character_Section.Position = UDim2.new(0, 105, 0, 30)
 Character_Section.Size = UDim2.new(0, 395, 0, 320)
 Character_Section.Visible = false
-Character_Section.CanvasSize = UDim2.new(0, 0, 1.5, 0)
+Character_Section.CanvasSize = UDim2.new(0, 0, 1, 0)
 Character_Section.ScrollBarThickness = 5
 
 WalkSpeed_Button.Name = "WalkSpeed_Button"
 WalkSpeed_Button.Parent = Character_Section
-WalkSpeed_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+WalkSpeed_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 WalkSpeed_Button.BackgroundTransparency = 0.500
 WalkSpeed_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 WalkSpeed_Button.BorderSizePixel = 0
@@ -990,9 +977,9 @@ WalkSpeed_Button.TextWrapped = true
 
 WalkSpeed_Input.Name = "WalkSpeed_Input"
 WalkSpeed_Input.Parent = Character_Section
-WalkSpeed_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+WalkSpeed_Input.BackgroundColor3 = Color3.fromRGB(0, 140, 140)
 WalkSpeed_Input.BackgroundTransparency = 0.300
-WalkSpeed_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
+WalkSpeed_Input.BorderColor3 = Color3.fromRGB(0, 255, 255)
 WalkSpeed_Input.Position = UDim2.new(0, 210, 0, 25)
 WalkSpeed_Input.Size = UDim2.new(0, 175, 0, 30)
 WalkSpeed_Input.Font = Enum.Font.Gotham
@@ -1005,11 +992,11 @@ WalkSpeed_Input.TextWrapped = true
 
 ClearCheckpoint_Button.Name = "ClearCheckpoint_Button"
 ClearCheckpoint_Button.Parent = Character_Section
-ClearCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ClearCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 ClearCheckpoint_Button.BackgroundTransparency = 0.500
 ClearCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ClearCheckpoint_Button.BorderSizePixel = 0
-ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 325)
+ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 225)
 ClearCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 ClearCheckpoint_Button.Font = Enum.Font.Oswald
 ClearCheckpoint_Button.Text = "Clear checkpoint"
@@ -1020,9 +1007,9 @@ ClearCheckpoint_Button.TextWrapped = true
 
 JumpPower_Input.Name = "JumpPower_Input"
 JumpPower_Input.Parent = Character_Section
-JumpPower_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+JumpPower_Input.BackgroundColor3 = Color3.fromRGB(0, 140, 140)
 JumpPower_Input.BackgroundTransparency = 0.300
-JumpPower_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
+JumpPower_Input.BorderColor3 = Color3.fromRGB(0, 255, 255)
 JumpPower_Input.Position = UDim2.new(0, 210, 0, 75)
 JumpPower_Input.Size = UDim2.new(0, 175, 0, 30)
 JumpPower_Input.Font = Enum.Font.Gotham
@@ -1035,7 +1022,7 @@ JumpPower_Input.TextWrapped = true
 
 JumpPower_Button.Name = "JumpPower_Button"
 JumpPower_Button.Parent = Character_Section
-JumpPower_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+JumpPower_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 JumpPower_Button.BackgroundTransparency = 0.500
 JumpPower_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 JumpPower_Button.BorderSizePixel = 0
@@ -1050,11 +1037,11 @@ JumpPower_Button.TextWrapped = true
 
 SaveCheckpoint_Button.Name = "SaveCheckpoint_Button"
 SaveCheckpoint_Button.Parent = Character_Section
-SaveCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+SaveCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 SaveCheckpoint_Button.BackgroundTransparency = 0.500
 SaveCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SaveCheckpoint_Button.BorderSizePixel = 0
-SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 375)
+SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 175)
 SaveCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 SaveCheckpoint_Button.Font = Enum.Font.Oswald
 SaveCheckpoint_Button.Text = "Save checkpoint"
@@ -1065,11 +1052,11 @@ SaveCheckpoint_Button.TextWrapped = true
 
 Respawn_Button.Name = "Respawn_Button"
 Respawn_Button.Parent = Character_Section
-Respawn_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Respawn_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Respawn_Button.BackgroundTransparency = 0.500
 Respawn_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Respawn_Button.BorderSizePixel = 0
-Respawn_Button.Position = UDim2.new(0, 25, 0, 325)
+Respawn_Button.Position = UDim2.new(0, 25, 0, 225)
 Respawn_Button.Size = UDim2.new(0, 150, 0, 30)
 Respawn_Button.Font = Enum.Font.Oswald
 Respawn_Button.Text = "Respawn"
@@ -1080,7 +1067,7 @@ Respawn_Button.TextWrapped = true
 
 FlySpeed_Button.Name = "FlySpeed_Button"
 FlySpeed_Button.Parent = Character_Section
-FlySpeed_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+FlySpeed_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 FlySpeed_Button.BackgroundTransparency = 0.500
 FlySpeed_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 FlySpeed_Button.BorderSizePixel = 0
@@ -1093,71 +1080,11 @@ FlySpeed_Button.TextScaled = true
 FlySpeed_Button.TextSize = 14.000
 FlySpeed_Button.TextWrapped = true
 
-FlyKeyBind_Button.Name = "FlyKeyBind_Button"
-FlyKeyBind_Button.Parent = Character_Section
-FlyKeyBind_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-FlyKeyBind_Button.BackgroundTransparency = 0.500
-FlyKeyBind_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-FlyKeyBind_Button.BorderSizePixel = 0
-FlyKeyBind_Button.Position = UDim2.new(0, 25, 0, 175)
-FlyKeyBind_Button.Size = UDim2.new(0, 150, 0, 30)
-FlyKeyBind_Button.Font = Enum.Font.Oswald
-FlyKeyBind_Button.Text = "Fly Key"
-FlyKeyBind_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-FlyKeyBind_Button.TextScaled = true
-FlyKeyBind_Button.TextSize = 14.000
-FlyKeyBind_Button.TextWrapped = true
-
-FlyKeyBind_Input.Name = "FlyKeyBind_Input"
-FlyKeyBind_Input.Parent = Character_Section
-FlyKeyBind_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-FlyKeyBind_Input.BackgroundTransparency = 0.300
-FlyKeyBind_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
-FlyKeyBind_Input.Position = UDim2.new(0, 210, 0, 175)
-FlyKeyBind_Input.Size = UDim2.new(0, 175, 0, 30)
-FlyKeyBind_Input.Font = Enum.Font.Gotham
-FlyKeyBind_Input.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-FlyKeyBind_Input.PlaceholderText = "Press Any Key"
-FlyKeyBind_Input.Text = ""
-FlyKeyBind_Input.TextColor3 = Color3.fromRGB(20, 20, 20)
-FlyKeyBind_Input.TextSize = 14.000
-FlyKeyBind_Input.TextWrapped = true
-
-TeleportKeyBind_Button.Name = "TeleportKeyBind_Button"
-TeleportKeyBind_Button.Parent = Character_Section
-TeleportKeyBind_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-TeleportKeyBind_Button.BackgroundTransparency = 0.500
-TeleportKeyBind_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TeleportKeyBind_Button.BorderSizePixel = 0
-TeleportKeyBind_Button.Position = UDim2.new(0, 25, 0, 225)
-TeleportKeyBind_Button.Size = UDim2.new(0, 150, 0, 30)
-TeleportKeyBind_Button.Font = Enum.Font.Oswald
-TeleportKeyBind_Button.Text = "Teleport Key"
-TeleportKeyBind_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-TeleportKeyBind_Button.TextScaled = true
-TeleportKeyBind_Button.TextSize = 14.000
-TeleportKeyBind_Button.TextWrapped = true
-
-TeleportKeyBind_Input.Name = "TeleportKeyBind_Input"
-TeleportKeyBind_Input.Parent = Character_Section
-TeleportKeyBind_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-TeleportKeyBind_Input.BackgroundTransparency = 0.300
-TeleportKeyBind_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
-TeleportKeyBind_Input.Position = UDim2.new(0, 210, 0, 225)
-TeleportKeyBind_Input.Size = UDim2.new(0, 175, 0, 30)
-TeleportKeyBind_Input.Font = Enum.Font.Gotham
-TeleportKeyBind_Input.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-TeleportKeyBind_Input.PlaceholderText = "Press Any Key"
-TeleportKeyBind_Input.Text = ""
-TeleportKeyBind_Input.TextColor3 = Color3.fromRGB(20, 20, 20)
-TeleportKeyBind_Input.TextSize = 14.000
-TeleportKeyBind_Input.TextWrapped = true
-
 FlySpeed_Input.Name = "FlySpeed_Input"
 FlySpeed_Input.Parent = Character_Section
-FlySpeed_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+FlySpeed_Input.BackgroundColor3 = Color3.fromRGB(0, 140, 140)
 FlySpeed_Input.BackgroundTransparency = 0.300
-FlySpeed_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
+FlySpeed_Input.BorderColor3 = Color3.fromRGB(0, 255, 255)
 FlySpeed_Input.Position = UDim2.new(0, 210, 0, 125)
 FlySpeed_Input.Size = UDim2.new(0, 175, 0, 30)
 FlySpeed_Input.Font = Enum.Font.Gotham
@@ -1170,11 +1097,11 @@ FlySpeed_Input.TextWrapped = true
 
 Fly_Button.Name = "Fly_Button"
 Fly_Button.Parent = Character_Section
-Fly_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Fly_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Fly_Button.BackgroundTransparency = 0.500
 Fly_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Fly_Button.BorderSizePixel = 0
-Fly_Button.Position = UDim2.new(0, 25, 0, 275)
+Fly_Button.Position = UDim2.new(0, 25, 0, 175)
 Fly_Button.Size = UDim2.new(0, 150, 0, 30)
 Fly_Button.Font = Enum.Font.Oswald
 Fly_Button.Text = "Fly"
@@ -1182,21 +1109,6 @@ Fly_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
 Fly_Button.TextScaled = true
 Fly_Button.TextSize = 14.000
 Fly_Button.TextWrapped = true
-
-PlateGen_Button.Name = "PlateGen_Button"
-PlateGen_Button.Parent = Character_Section
-PlateGen_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-PlateGen_Button.BackgroundTransparency = 0.500
-PlateGen_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-PlateGen_Button.BorderSizePixel = 0
-PlateGen_Button.Position = UDim2.new(0, 210, 0, 275)
-PlateGen_Button.Size = UDim2.new(0, 150, 0, 30)
-PlateGen_Button.Font = Enum.Font.Oswald
-PlateGen_Button.Text = "Plate Gen"
-PlateGen_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-PlateGen_Button.TextScaled = true
-PlateGen_Button.TextSize = 14.000
-PlateGen_Button.TextWrapped = true
 
 Target_Section.Name = "Target_Section"
 Target_Section.Parent = Background
@@ -1208,22 +1120,22 @@ Target_Section.BorderSizePixel = 0
 Target_Section.Position = UDim2.new(0, 105, 0, 30)
 Target_Section.Size = UDim2.new(0, 395, 0, 320)
 Target_Section.Visible = false
-Target_Section.CanvasSize = UDim2.new(0, 0, 2, 0)
+Target_Section.CanvasSize = UDim2.new(0, 0, 1.25, 0)
 Target_Section.ScrollBarThickness = 5
 
 TargetImage.Name = "TargetImage"
 TargetImage.Parent = Target_Section
-TargetImage.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-TargetImage.BorderColor3 = Color3.fromRGB(100, 100, 100)
+TargetImage.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+TargetImage.BorderColor3 = Color3.fromRGB(0, 255, 255)
 TargetImage.Position = UDim2.new(0, 25, 0, 25)
 TargetImage.Size = UDim2.new(0, 100, 0, 100)
 TargetImage.Image = "rbxassetid://10818605405"
 
 TargetName_Input.Name = "TargetName_Input"
 TargetName_Input.Parent = Target_Section
-TargetName_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+TargetName_Input.BackgroundColor3 = Color3.fromRGB(0, 140, 140)
 TargetName_Input.BackgroundTransparency = 0.300
-TargetName_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
+TargetName_Input.BorderColor3 = Color3.fromRGB(0, 255, 255)
 TargetName_Input.Position = UDim2.new(0, 150, 0, 30)
 TargetName_Input.Size = UDim2.new(0, 175, 0, 30)
 TargetName_Input.Font = Enum.Font.Gotham
@@ -1254,7 +1166,7 @@ UserIDTargetLabel.Position = UDim2.new(0, 150, 0, 70)
 UserIDTargetLabel.Size = UDim2.new(0, 300, 0, 75)
 UserIDTargetLabel.Font = Enum.Font.Oswald
 UserIDTargetLabel.Text = "UserID: \nDisplay: \nJoined: "
-UserIDTargetLabel.TextColor3 = Color3.fromRGB(100, 100, 100)
+UserIDTargetLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
 UserIDTargetLabel.TextSize = 18.000
 UserIDTargetLabel.TextWrapped = true
 UserIDTargetLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -1262,7 +1174,7 @@ UserIDTargetLabel.TextYAlignment = Enum.TextYAlignment.Top
 
 ViewTarget_Button.Name = "ViewTarget_Button"
 ViewTarget_Button.Parent = Target_Section
-ViewTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ViewTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 ViewTarget_Button.BackgroundTransparency = 0.500
 ViewTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ViewTarget_Button.BorderSizePixel = 0
@@ -1277,7 +1189,7 @@ ViewTarget_Button.TextWrapped = true
 
 FlingTarget_Button.Name = "FlingTarget_Button"
 FlingTarget_Button.Parent = Target_Section
-FlingTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+FlingTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 FlingTarget_Button.BackgroundTransparency = 0.500
 FlingTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 FlingTarget_Button.BorderSizePixel = 0
@@ -1292,7 +1204,7 @@ FlingTarget_Button.TextWrapped = true
 
 FocusTarget_Button.Name = "FocusTarget_Button"
 FocusTarget_Button.Parent = Target_Section
-FocusTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+FocusTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 FocusTarget_Button.BackgroundTransparency = 0.500
 FocusTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 FocusTarget_Button.BorderSizePixel = 0
@@ -1307,7 +1219,7 @@ FocusTarget_Button.TextWrapped = true
 
 BenxTarget_Button.Name = "BenxTarget_Button"
 BenxTarget_Button.Parent = Target_Section
-BenxTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+BenxTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 BenxTarget_Button.BackgroundTransparency = 0.500
 BenxTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 BenxTarget_Button.BorderSizePixel = 0
@@ -1320,28 +1232,13 @@ BenxTarget_Button.TextScaled = true
 BenxTarget_Button.TextSize = 14.000
 BenxTarget_Button.TextWrapped = true
 
-FaceTarget_Button.Name = "FaceTarget_Button"
-FaceTarget_Button.Parent = Target_Section
-FaceTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-FaceTarget_Button.BackgroundTransparency = 0.500
-FaceTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-FaceTarget_Button.BorderSizePixel = 0
-FaceTarget_Button.Position = UDim2.new(0, 210, 0, 350)
-FaceTarget_Button.Size = UDim2.new(0, 150, 0, 30)
-FaceTarget_Button.Font = Enum.Font.Oswald
-FaceTarget_Button.Text = "Face"
-FaceTarget_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-FaceTarget_Button.TextScaled = true
-FaceTarget_Button.TextSize = 14.000
-FaceTarget_Button.TextWrapped = true
-
 PushTarget_Button.Name = "PushTarget_Button"
 PushTarget_Button.Parent = Target_Section
-PushTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PushTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PushTarget_Button.BackgroundTransparency = 0.500
 PushTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PushTarget_Button.BorderSizePixel = 0
-PushTarget_Button.Position = UDim2.new(0, 25, 0, 450)
+PushTarget_Button.Position = UDim2.new(0, 25, 0, 400)
 PushTarget_Button.Size = UDim2.new(0, 150, 0, 30)
 PushTarget_Button.Font = Enum.Font.Oswald
 PushTarget_Button.Text = "Push"
@@ -1352,11 +1249,11 @@ PushTarget_Button.TextWrapped = true
 
 WhitelistTarget_Button.Name = "WhitelistTarget_Button"
 WhitelistTarget_Button.Parent = Target_Section
-WhitelistTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+WhitelistTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 WhitelistTarget_Button.BackgroundTransparency = 0.500
 WhitelistTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 WhitelistTarget_Button.BorderSizePixel = 0
-WhitelistTarget_Button.Position = UDim2.new(0, 210, 0, 450)
+WhitelistTarget_Button.Position = UDim2.new(0, 210, 0, 400)
 WhitelistTarget_Button.Size = UDim2.new(0, 150, 0, 30)
 WhitelistTarget_Button.Font = Enum.Font.Oswald
 WhitelistTarget_Button.Text = "Whitelist"
@@ -1365,43 +1262,13 @@ WhitelistTarget_Button.TextScaled = true
 WhitelistTarget_Button.TextSize = 14.000
 WhitelistTarget_Button.TextWrapped = true
 
-FaceSpeed_Button.Name = "FaceSpeed_Button"
-FaceSpeed_Button.Parent = Target_Section
-FaceSpeed_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-FaceSpeed_Button.BackgroundTransparency = 0.500
-FaceSpeed_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-FaceSpeed_Button.BorderSizePixel = 0
-FaceSpeed_Button.Position = UDim2.new(0, 25, 0, 400)
-FaceSpeed_Button.Size = UDim2.new(0, 150, 0, 30)
-FaceSpeed_Button.Font = Enum.Font.Oswald
-FaceSpeed_Button.Text = "Face Speed"
-FaceSpeed_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-FaceSpeed_Button.TextScaled = true
-FaceSpeed_Button.TextSize = 14.000
-FaceSpeed_Button.TextWrapped = true
-
-FaceSpeed_Input.Name = "FaceSpeed_Input"
-FaceSpeed_Input.Parent = Target_Section
-FaceSpeed_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-FaceSpeed_Input.BackgroundTransparency = 0.300
-FaceSpeed_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
-FaceSpeed_Input.Position = UDim2.new(0, 210, 0, 400)
-FaceSpeed_Input.Size = UDim2.new(0, 175, 0, 30)
-FaceSpeed_Input.Font = Enum.Font.Gotham
-FaceSpeed_Input.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-FaceSpeed_Input.PlaceholderText = "Number [1-99999]"
-FaceSpeed_Input.Text = ""
-FaceSpeed_Input.TextColor3 = Color3.fromRGB(20, 20, 20)
-FaceSpeed_Input.TextSize = 14.000
-FaceSpeed_Input.TextWrapped = true
-
 TeleportTarget_Button.Name = "TeleportTarget_Button"
 TeleportTarget_Button.Parent = Target_Section
-TeleportTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+TeleportTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 TeleportTarget_Button.BackgroundTransparency = 0.500
 TeleportTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 TeleportTarget_Button.BorderSizePixel = 0
-TeleportTarget_Button.Position = UDim2.new(0, 210, 0, 500)
+TeleportTarget_Button.Position = UDim2.new(0, 210, 0, 350)
 TeleportTarget_Button.Size = UDim2.new(0, 150, 0, 30)
 TeleportTarget_Button.Font = Enum.Font.Oswald
 TeleportTarget_Button.Text = "Teleport"
@@ -1412,7 +1279,7 @@ TeleportTarget_Button.TextWrapped = true
 
 HeadsitTarget_Button.Name = "HeadsitTarget_Button"
 HeadsitTarget_Button.Parent = Target_Section
-HeadsitTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+HeadsitTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 HeadsitTarget_Button.BackgroundTransparency = 0.500
 HeadsitTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 HeadsitTarget_Button.BorderSizePixel = 0
@@ -1427,7 +1294,7 @@ HeadsitTarget_Button.TextWrapped = true
 
 StandTarget_Button.Name = "StandTarget_Button"
 StandTarget_Button.Parent = Target_Section
-StandTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+StandTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 StandTarget_Button.BackgroundTransparency = 0.500
 StandTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 StandTarget_Button.BorderSizePixel = 0
@@ -1442,7 +1309,7 @@ StandTarget_Button.TextWrapped = true
 
 BackpackTarget_Button.Name = "BackpackTarget_Button"
 BackpackTarget_Button.Parent = Target_Section
-BackpackTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+BackpackTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 BackpackTarget_Button.BackgroundTransparency = 0.500
 BackpackTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 BackpackTarget_Button.BorderSizePixel = 0
@@ -1457,7 +1324,7 @@ BackpackTarget_Button.TextWrapped = true
 
 DoggyTarget_Button.Name = "DoggyTarget_Button"
 DoggyTarget_Button.Parent = Target_Section
-DoggyTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+DoggyTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 DoggyTarget_Button.BackgroundTransparency = 0.500
 DoggyTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 DoggyTarget_Button.BorderSizePixel = 0
@@ -1472,7 +1339,7 @@ DoggyTarget_Button.TextWrapped = true
 
 DragTarget_Button.Name = "DragTarget_Button"
 DragTarget_Button.Parent = Target_Section
-DragTarget_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+DragTarget_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 DragTarget_Button.BackgroundTransparency = 0.500
 DragTarget_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 DragTarget_Button.BorderSizePixel = 0
@@ -1495,12 +1362,12 @@ Animations_Section.BorderSizePixel = 0
 Animations_Section.Position = UDim2.new(0, 105, 0, 30)
 Animations_Section.Size = UDim2.new(0, 395, 0, 320)
 Animations_Section.Visible = false
-Animations_Section.CanvasSize = UDim2.new(0, 0, 2, 0)
+Animations_Section.CanvasSize = UDim2.new(0, 0, 1.6, 0)
 Animations_Section.ScrollBarThickness = 5
 
 VampireAnim_Button.Name = "VampireAnim_Button"
 VampireAnim_Button.Parent = Animations_Section
-VampireAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+VampireAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 VampireAnim_Button.BackgroundTransparency = 0.500
 VampireAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 VampireAnim_Button.BorderSizePixel = 0
@@ -1515,7 +1382,7 @@ VampireAnim_Button.TextWrapped = true
 
 HeroAnim_Button.Name = "HeroAnim_Button"
 HeroAnim_Button.Parent = Animations_Section
-HeroAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+HeroAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 HeroAnim_Button.BackgroundTransparency = 0.500
 HeroAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 HeroAnim_Button.BorderSizePixel = 0
@@ -1530,7 +1397,7 @@ HeroAnim_Button.TextWrapped = true
 
 ZombieClassicAnim_Button.Name = "ZombieClassicAnim_Button"
 ZombieClassicAnim_Button.Parent = Animations_Section
-ZombieClassicAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ZombieClassicAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 ZombieClassicAnim_Button.BackgroundTransparency = 0.500
 ZombieClassicAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ZombieClassicAnim_Button.BorderSizePixel = 0
@@ -1545,7 +1412,7 @@ ZombieClassicAnim_Button.TextWrapped = true
 
 MageAnim_Button.Name = "MageAnim_Button"
 MageAnim_Button.Parent = Animations_Section
-MageAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+MageAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 MageAnim_Button.BackgroundTransparency = 0.500
 MageAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 MageAnim_Button.BorderSizePixel = 0
@@ -1560,7 +1427,7 @@ MageAnim_Button.TextWrapped = true
 
 GhostAnim_Button.Name = "GhostAnim_Button"
 GhostAnim_Button.Parent = Animations_Section
-GhostAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+GhostAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 GhostAnim_Button.BackgroundTransparency = 0.500
 GhostAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 GhostAnim_Button.BorderSizePixel = 0
@@ -1575,7 +1442,7 @@ GhostAnim_Button.TextWrapped = true
 
 ElderAnim_Button.Name = "ElderAnim_Button"
 ElderAnim_Button.Parent = Animations_Section
-ElderAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ElderAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 ElderAnim_Button.BackgroundTransparency = 0.500
 ElderAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ElderAnim_Button.BorderSizePixel = 0
@@ -1590,7 +1457,7 @@ ElderAnim_Button.TextWrapped = true
 
 LevitationAnim_Button.Name = "LevitationAnim_Button"
 LevitationAnim_Button.Parent = Animations_Section
-LevitationAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+LevitationAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 LevitationAnim_Button.BackgroundTransparency = 0.500
 LevitationAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 LevitationAnim_Button.BorderSizePixel = 0
@@ -1605,7 +1472,7 @@ LevitationAnim_Button.TextWrapped = true
 
 AstronautAnim_Button.Name = "AstronautAnim_Button"
 AstronautAnim_Button.Parent = Animations_Section
-AstronautAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+AstronautAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 AstronautAnim_Button.BackgroundTransparency = 0.500
 AstronautAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 AstronautAnim_Button.BorderSizePixel = 0
@@ -1620,7 +1487,7 @@ AstronautAnim_Button.TextWrapped = true
 
 NinjaAnim_Button.Name = "NinjaAnim_Button"
 NinjaAnim_Button.Parent = Animations_Section
-NinjaAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+NinjaAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 NinjaAnim_Button.BackgroundTransparency = 0.500
 NinjaAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 NinjaAnim_Button.BorderSizePixel = 0
@@ -1635,7 +1502,7 @@ NinjaAnim_Button.TextWrapped = true
 
 WerewolfAnim_Button.Name = "WerewolfAnim_Button"
 WerewolfAnim_Button.Parent = Animations_Section
-WerewolfAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+WerewolfAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 WerewolfAnim_Button.BackgroundTransparency = 0.500
 WerewolfAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 WerewolfAnim_Button.BorderSizePixel = 0
@@ -1650,7 +1517,7 @@ WerewolfAnim_Button.TextWrapped = true
 
 CartoonAnim_Button.Name = "CartoonAnim_Button"
 CartoonAnim_Button.Parent = Animations_Section
-CartoonAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+CartoonAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 CartoonAnim_Button.BackgroundTransparency = 0.500
 CartoonAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 CartoonAnim_Button.BorderSizePixel = 0
@@ -1665,7 +1532,7 @@ CartoonAnim_Button.TextWrapped = true
 
 PirateAnim_Button.Name = "PirateAnim_Button"
 PirateAnim_Button.Parent = Animations_Section
-PirateAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PirateAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PirateAnim_Button.BackgroundTransparency = 0.500
 PirateAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PirateAnim_Button.BorderSizePixel = 0
@@ -1680,7 +1547,7 @@ PirateAnim_Button.TextWrapped = true
 
 SneakyAnim_Button.Name = "SneakyAnim_Button"
 SneakyAnim_Button.Parent = Animations_Section
-SneakyAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+SneakyAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 SneakyAnim_Button.BackgroundTransparency = 0.500
 SneakyAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SneakyAnim_Button.BorderSizePixel = 0
@@ -1695,7 +1562,7 @@ SneakyAnim_Button.TextWrapped = true
 
 ToyAnim_Button.Name = "ToyAnim_Button"
 ToyAnim_Button.Parent = Animations_Section
-ToyAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ToyAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 ToyAnim_Button.BackgroundTransparency = 0.500
 ToyAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ToyAnim_Button.BorderSizePixel = 0
@@ -1710,7 +1577,7 @@ ToyAnim_Button.TextWrapped = true
 
 KnightAnim_Button.Name = "KnightAnim_Button"
 KnightAnim_Button.Parent = Animations_Section
-KnightAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+KnightAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 KnightAnim_Button.BackgroundTransparency = 0.500
 KnightAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 KnightAnim_Button.BorderSizePixel = 0
@@ -1725,7 +1592,7 @@ KnightAnim_Button.TextWrapped = true
 
 ConfidentAnim_Button.Name = "ConfidentAnim_Button"
 ConfidentAnim_Button.Parent = Animations_Section
-ConfidentAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ConfidentAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 ConfidentAnim_Button.BackgroundTransparency = 0.500
 ConfidentAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ConfidentAnim_Button.BorderSizePixel = 0
@@ -1740,7 +1607,7 @@ ConfidentAnim_Button.TextWrapped = true
 
 PopstarAnim_Button.Name = "PopstarAnim_Button"
 PopstarAnim_Button.Parent = Animations_Section
-PopstarAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PopstarAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PopstarAnim_Button.BackgroundTransparency = 0.500
 PopstarAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PopstarAnim_Button.BorderSizePixel = 0
@@ -1755,7 +1622,7 @@ PopstarAnim_Button.TextWrapped = true
 
 PrincessAnim_Button.Name = "PrincessAnim_Button"
 PrincessAnim_Button.Parent = Animations_Section
-PrincessAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PrincessAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PrincessAnim_Button.BackgroundTransparency = 0.500
 PrincessAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PrincessAnim_Button.BorderSizePixel = 0
@@ -1770,7 +1637,7 @@ PrincessAnim_Button.TextWrapped = true
 
 CowboyAnim_Button.Name = "CowboyAnim_Button"
 CowboyAnim_Button.Parent = Animations_Section
-CowboyAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+CowboyAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 CowboyAnim_Button.BackgroundTransparency = 0.500
 CowboyAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 CowboyAnim_Button.BorderSizePixel = 0
@@ -1785,7 +1652,7 @@ CowboyAnim_Button.TextWrapped = true
 
 PatrolAnim_Button.Name = "PatrolAnim_Button"
 PatrolAnim_Button.Parent = Animations_Section
-PatrolAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PatrolAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 PatrolAnim_Button.BackgroundTransparency = 0.500
 PatrolAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 PatrolAnim_Button.BorderSizePixel = 0
@@ -1800,7 +1667,7 @@ PatrolAnim_Button.TextWrapped = true
 
 ZombieFEAnim_Button.Name = "ZombieFEAnim_Button"
 ZombieFEAnim_Button.Parent = Animations_Section
-ZombieFEAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ZombieFEAnim_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 ZombieFEAnim_Button.BackgroundTransparency = 0.500
 ZombieFEAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ZombieFEAnim_Button.BorderSizePixel = 0
@@ -1812,66 +1679,6 @@ ZombieFEAnim_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
 ZombieFEAnim_Button.TextScaled = true
 ZombieFEAnim_Button.TextSize = 14.000
 ZombieFEAnim_Button.TextWrapped = true
-
-AuraAnim_Button.Name = "AuraAnim_Button"
-AuraAnim_Button.Parent = Animations_Section
-AuraAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-AuraAnim_Button.BackgroundTransparency = 0.500
-AuraAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-AuraAnim_Button.BorderSizePixel = 0
-AuraAnim_Button.Position = UDim2.new(0, 210, 0, 525)
-AuraAnim_Button.Size = UDim2.new(0, 150, 0, 30)
-AuraAnim_Button.Font = Enum.Font.Oswald
-AuraAnim_Button.Text = "Aura"
-AuraAnim_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-AuraAnim_Button.TextScaled = true
-AuraAnim_Button.TextSize = 14.000
-AuraAnim_Button.TextWrapped = true
-
-CommunityAnim_Button.Name = "CommunityAnim_Button"
-CommunityAnim_Button.Parent = Animations_Section
-CommunityAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-CommunityAnim_Button.BackgroundTransparency = 0.500
-CommunityAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-CommunityAnim_Button.BorderSizePixel = 0
-CommunityAnim_Button.Position = UDim2.new(0, 210, 0, 575)
-CommunityAnim_Button.Size = UDim2.new(0, 150, 0, 30)
-CommunityAnim_Button.Font = Enum.Font.Oswald
-CommunityAnim_Button.Text = "Community"
-CommunityAnim_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-CommunityAnim_Button.TextScaled = true
-CommunityAnim_Button.TextSize = 14.000
-CommunityAnim_Button.TextWrapped = true
-
-OldAnim_Button.Name = "OldAnim_Button"
-OldAnim_Button.Parent = Animations_Section
-OldAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-OldAnim_Button.BackgroundTransparency = 0.500
-OldAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-OldAnim_Button.BorderSizePixel = 0
-OldAnim_Button.Position = UDim2.new(0, 25, 0, 625)
-OldAnim_Button.Size = UDim2.new(0, 150, 0, 30)
-OldAnim_Button.Font = Enum.Font.Oswald
-OldAnim_Button.Text = "Old"
-OldAnim_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-OldAnim_Button.TextScaled = true
-OldAnim_Button.TextSize = 14.000
-OldAnim_Button.TextWrapped = true
-
-PopularAnim_Button.Name = "PopularAnim_Button"
-PopularAnim_Button.Parent = Animations_Section
-PopularAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-PopularAnim_Button.BackgroundTransparency = 0.500
-PopularAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-PopularAnim_Button.BorderSizePixel = 0
-PopularAnim_Button.Position = UDim2.new(0, 25, 0, 575)
-PopularAnim_Button.Size = UDim2.new(0, 150, 0, 30)
-PopularAnim_Button.Font = Enum.Font.Oswald
-PopularAnim_Button.Text = "Popular"
-PopularAnim_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-PopularAnim_Button.TextScaled = true
-PopularAnim_Button.TextSize = 14.000
-PopularAnim_Button.TextWrapped = true
 
 Misc_Section.Name = "Misc_Section"
 Misc_Section.Parent = Background
@@ -1888,7 +1695,7 @@ Misc_Section.ScrollBarThickness = 5
 
 AntiFling_Button.Name = "AntiFling_Button"
 AntiFling_Button.Parent = Misc_Section
-AntiFling_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+AntiFling_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 AntiFling_Button.BackgroundTransparency = 0.500
 AntiFling_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 AntiFling_Button.BorderSizePixel = 0
@@ -1903,7 +1710,7 @@ AntiFling_Button.TextWrapped = true
 
 AntiAFK_Button.Name = "AntiAFK_Button"
 AntiAFK_Button.Parent = Misc_Section
-AntiAFK_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+AntiAFK_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 AntiAFK_Button.BackgroundTransparency = 0.500
 AntiAFK_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 AntiAFK_Button.BorderSizePixel = 0
@@ -1918,7 +1725,7 @@ AntiAFK_Button.TextWrapped = true
 
 AntiChatSpy_Button.Name = "AntiChatSpy_Button"
 AntiChatSpy_Button.Parent = Misc_Section
-AntiChatSpy_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+AntiChatSpy_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 AntiChatSpy_Button.BackgroundTransparency = 0.500
 AntiChatSpy_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 AntiChatSpy_Button.BorderSizePixel = 0
@@ -1933,7 +1740,7 @@ AntiChatSpy_Button.TextWrapped = true
 
 Shaders_Button.Name = "Shaders_Button"
 Shaders_Button.Parent = Misc_Section
-Shaders_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Shaders_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Shaders_Button.BackgroundTransparency = 0.500
 Shaders_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Shaders_Button.BorderSizePixel = 0
@@ -1948,7 +1755,7 @@ Shaders_Button.TextWrapped = true
 
 Day_Button.Name = "Day_Button"
 Day_Button.Parent = Misc_Section
-Day_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Day_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Day_Button.BackgroundTransparency = 0.500
 Day_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Day_Button.BorderSizePixel = 0
@@ -1963,7 +1770,7 @@ Day_Button.TextWrapped = true
 
 Night_Button.Name = "Night_Button"
 Night_Button.Parent = Misc_Section
-Night_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Night_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Night_Button.BackgroundTransparency = 0.500
 Night_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Night_Button.BorderSizePixel = 0
@@ -1978,7 +1785,7 @@ Night_Button.TextWrapped = true
 
 Explode_Button.Name = "Explode_Button"
 Explode_Button.Parent = Misc_Section
-Explode_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Explode_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Explode_Button.BackgroundTransparency = 0.500
 Explode_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Explode_Button.BorderSizePixel = 0
@@ -1993,11 +1800,11 @@ Explode_Button.TextWrapped = true
 
 Rejoin_Button.Name = "Rejoin_Button"
 Rejoin_Button.Parent = Misc_Section
-Rejoin_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Rejoin_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Rejoin_Button.BackgroundTransparency = 0.500
 Rejoin_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Rejoin_Button.BorderSizePixel = 0
-Rejoin_Button.Position = UDim2.new(0, 210, 0, 225)
+Rejoin_Button.Position = UDim2.new(0, 25, 0, 275)
 Rejoin_Button.Size = UDim2.new(0, 150, 0, 30)
 Rejoin_Button.Font = Enum.Font.Oswald
 Rejoin_Button.Text = "Rejoin"
@@ -2006,9 +1813,24 @@ Rejoin_Button.TextScaled = true
 Rejoin_Button.TextSize = 14.000
 Rejoin_Button.TextWrapped = true
 
+CMDX_Button.Name = "CMDX_Button"
+CMDX_Button.Parent = Misc_Section
+CMDX_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+CMDX_Button.BackgroundTransparency = 0.500
+CMDX_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+CMDX_Button.BorderSizePixel = 0
+CMDX_Button.Position = UDim2.new(0, 210, 0, 175)
+CMDX_Button.Size = UDim2.new(0, 150, 0, 30)
+CMDX_Button.Font = Enum.Font.Oswald
+CMDX_Button.Text = "CMDX"
+CMDX_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+CMDX_Button.TextScaled = true
+CMDX_Button.TextSize = 14.000
+CMDX_Button.TextWrapped = true
+
 InfYield_Button.Name = "InfYield_Button"
 InfYield_Button.Parent = Misc_Section
-InfYield_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+InfYield_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 InfYield_Button.BackgroundTransparency = 0.500
 InfYield_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 InfYield_Button.BorderSizePixel = 0
@@ -2021,13 +1843,28 @@ InfYield_Button.TextScaled = true
 InfYield_Button.TextSize = 14.000
 InfYield_Button.TextWrapped = true
 
+FreeEmotes_Button.Name = "FreeEmotes_Button"
+FreeEmotes_Button.Parent = Misc_Section
+FreeEmotes_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+FreeEmotes_Button.BackgroundTransparency = 0.500
+FreeEmotes_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FreeEmotes_Button.BorderSizePixel = 0
+FreeEmotes_Button.Position = UDim2.new(0, 210, 0, 225)
+FreeEmotes_Button.Size = UDim2.new(0, 150, 0, 30)
+FreeEmotes_Button.Font = Enum.Font.Oswald
+FreeEmotes_Button.Text = "Free emotes"
+FreeEmotes_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+FreeEmotes_Button.TextScaled = true
+FreeEmotes_Button.TextSize = 14.000
+FreeEmotes_Button.TextWrapped = true
+
 Serverhop_Button.Name = "Serverhop_Button"
 Serverhop_Button.Parent = Misc_Section
-Serverhop_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Serverhop_Button.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
 Serverhop_Button.BackgroundTransparency = 0.500
 Serverhop_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Serverhop_Button.BorderSizePixel = 0
-Serverhop_Button.Position = UDim2.new(0, 210, 0, 175)
+Serverhop_Button.Position = UDim2.new(0, 210, 0, 275)
 Serverhop_Button.Size = UDim2.new(0, 150, 0, 30)
 Serverhop_Button.Font = Enum.Font.Oswald
 Serverhop_Button.Text = "Server hop"
@@ -2035,6 +1872,21 @@ Serverhop_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
 Serverhop_Button.TextScaled = true
 Serverhop_Button.TextSize = 14.000
 Serverhop_Button.TextWrapped = true
+
+ChatBox_Input.Name = "ChatBox_Input"
+ChatBox_Input.Parent = Misc_Section
+ChatBox_Input.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ChatBox_Input.BorderColor3 = Color3.fromRGB(0, 255, 255)
+ChatBox_Input.Position = UDim2.new(0, 25, 0, 325)
+ChatBox_Input.Size = UDim2.new(0, 335, 0, 50)
+ChatBox_Input.Font = Enum.Font.Oswald
+ChatBox_Input.PlaceholderText = "Chat bypass [You won't get banned for your messages]"
+ChatBox_Input.Text = ""
+ChatBox_Input.TextColor3 = Color3.fromRGB(0, 255, 255)
+ChatBox_Input.TextSize = 14.000
+ChatBox_Input.TextWrapped = true
+ChatBox_Input.TextXAlignment = Enum.TextXAlignment.Left
+ChatBox_Input.TextYAlignment = Enum.TextYAlignment.Top
 
 Credits_Section.Name = "Credits_Section"
 Credits_Section.Parent = Background
@@ -2051,18 +1903,30 @@ Credits_Section.ScrollBarThickness = 5
 
 Credits_Label.Name = "Credits_Label"
 Credits_Label.Parent = Credits_Section
-Credits_Label.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Credits_Label.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Credits_Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Credits_Label.BorderSizePixel = 0
 Credits_Label.Position = UDim2.new(0, 25, 0, 150)
 Credits_Label.Size = UDim2.new(0, 350, 0, 150)
 Credits_Label.Font = Enum.Font.SourceSans
 Credits_Label.Text = "Made by: Kavreno \nVersion: "..version
-Credits_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
+Credits_Label.TextColor3 = Color3.fromRGB(0, 255, 255)
 Credits_Label.TextSize = 24.000
 Credits_Label.TextWrapped = true
 Credits_Label.TextXAlignment = Enum.TextXAlignment.Left
 Credits_Label.TextYAlignment = Enum.TextYAlignment.Top
+
+Crown.Name = "Crown"
+Crown.Parent = Background
+Crown.AnchorPoint = Vector2.new(0.300000012, 0.800000012)
+Crown.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Crown.BackgroundTransparency = 1.000
+Crown.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Crown.BorderSizePixel = 0
+Crown.Rotation = -20.000
+Crown.Size = UDim2.new(0, 75, 0, 75)
+Crown.Image = "rbxassetid://12298407748"
+Crown.ImageColor3 = Color3.fromRGB(0, 255, 255)
 
 Assets.Name = "Assets"
 Assets.Parent = SysBroker
@@ -2171,6 +2035,19 @@ FlySButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 FlySButton.TextSize = 25.000
 FlySButton.TextWrapped = true
 
+OpenClose.Name = "OpenClose"
+OpenClose.Parent = SysBroker
+OpenClose.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+OpenClose.BorderColor3 = Color3.fromRGB(0, 0, 0)
+OpenClose.BorderSizePixel = 0
+OpenClose.Position = UDim2.new(0, 0, 0.5, 0)
+OpenClose.Size = UDim2.new(0, 30, 0, 30)
+OpenClose.Image = "rbxassetid://12298407748"
+OpenClose.ImageColor3 = Color3.fromRGB(0, 255, 255)
+
+UICornerOC.CornerRadius = UDim.new(1, 0)
+UICornerOC.Parent = OpenClose
+
 CreateToggle(AntiRagdoll_Button)
 CreateToggle(PushAura_Button)
 CreateToggle(SpamMines_Button)
@@ -2195,21 +2072,17 @@ CreateClicker(SkyscraperTP_Button)
 CreateClicker(PoolTP_Button)
 
 CreateToggle(Fly_Button)
-CreateToggle(PlateGen_Button)
 CreateClicker(WalkSpeed_Button)
 CreateClicker(ClearCheckpoint_Button)
 CreateClicker(JumpPower_Button)
 CreateClicker(SaveCheckpoint_Button)
 CreateClicker(Respawn_Button)
 CreateClicker(FlySpeed_Button)
-CreateClicker(FlyKeyBind_Button)
-CreateClicker(TeleportKeyBind_Button)
 
 CreateToggle(ViewTarget_Button)
 CreateToggle(FlingTarget_Button)
 CreateToggle(FocusTarget_Button)
 CreateToggle(BenxTarget_Button)
-CreateToggle(FaceTarget_Button)
 CreateToggle(HeadsitTarget_Button)
 CreateToggle(StandTarget_Button)
 CreateToggle(BackpackTarget_Button)
@@ -2217,7 +2090,6 @@ CreateToggle(DoggyTarget_Button)
 CreateToggle(DragTarget_Button)
 CreateClicker(PushTarget_Button)
 CreateClicker(WhitelistTarget_Button)
-CreateClicker(FaceSpeed_Button)
 CreateClicker(TeleportTarget_Button)
 
 CreateClicker(VampireAnim_Button)
@@ -2241,10 +2113,6 @@ CreateClicker(PrincessAnim_Button)
 CreateClicker(CowboyAnim_Button)
 CreateClicker(PatrolAnim_Button)
 CreateClicker(ZombieFEAnim_Button)
-CreateClicker(AuraAnim_Button)
-CreateClicker(CommunityAnim_Button)
-CreateClicker(OldAnim_Button)
-CreateClicker(PopularAnim_Button)
 
 CreateToggle(AntiFling_Button)
 CreateToggle(AntiChatSpy_Button)
@@ -2253,7 +2121,9 @@ CreateToggle(Shaders_Button)
 CreateClicker(Day_Button)
 CreateClicker(Night_Button)
 CreateClicker(Rejoin_Button)
+CreateClicker(CMDX_Button)
 CreateClicker(Explode_Button)
+CreateClicker(FreeEmotes_Button)
 CreateClicker(InfYield_Button)
 CreateClicker(Serverhop_Button)
 
@@ -2302,7 +2172,6 @@ local function UpdateTarget(player)
 		ViewTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		FocusTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		BenxTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
-		FaceTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		HeadsitTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		StandTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
 		BackpackTarget_Button.Ticket_Asset.ImageColor3 = Color3.fromRGB(255,0,0)
@@ -2657,97 +2526,6 @@ end)
 
 --CHARACTER SECTION
 
-local player = game.Players.LocalPlayer
-local runService = game:GetService("RunService")
-local workspace = game:GetService("Workspace")
-
-local PLATE_SIZE = Vector3.new(4,1,4)
-local GRID_RADIUS = 1
-local GROUND_Y = -1.001
-local plates = {}
-
-local GRASS_MATERIAL = Enum.Material.Grass
-local GRASS_COLOR = Color3.fromRGB(80, 170, 95)
-
-local function createPlate(position)
-    local plate = Instance.new("Part")
-    plate.Size = PLATE_SIZE
-    plate.Anchored = true
-    plate.CanCollide = true
-    plate.Position = Vector3.new(position.X, GROUND_Y + PLATE_SIZE.Y/2, position.Z)
-    plate.Material = GRASS_MATERIAL
-    plate.Color = GRASS_COLOR
-    plate.Parent = workspace
-    table.insert(plates, plate)
-    return plate
-end
-
-local function getPlateUnderPosition(pos)
-    for _, plate in pairs(plates) do
-        local size = plate.Size
-        local pPos = plate.Position
-        if pos.X > pPos.X - size.X/2 and pos.X < pPos.X + size.X/2 and
-           pos.Z > pPos.Z - size.Z/2 and pos.Z < pPos.Z + size.Z/2 then
-            return plate
-        end
-    end
-    return nil
-end
-
-runService.RenderStepped:Connect(function()
-    pcall(function()
-        if not plateGenEnabled then
-            for i = #plates, 1, -1 do
-                local plate = plates[i]
-                if plate and plate.Parent then
-                    plate:Destroy()
-                end
-                table.remove(plates, i)
-            end
-            return
-        end
-
-        local character = player.Character
-        if not character then return end
-        local hrp = character:FindFirstChild("HumanoidRootPart")
-        if not hrp then return end
-
-        local playerPos = hrp.Position
-        local platesThisFrame = {}
-
-        for x = -GRID_RADIUS, GRID_RADIUS do
-            for z = -GRID_RADIUS, GRID_RADIUS do
-                local gridX = math.floor((playerPos.X + x * PLATE_SIZE.X)/PLATE_SIZE.X) * PLATE_SIZE.X
-                local gridZ = math.floor((playerPos.Z + z * PLATE_SIZE.Z)/PLATE_SIZE.Z) * PLATE_SIZE.Z
-                local gridPos = Vector3.new(gridX, GROUND_Y, gridZ)
-
-                local plate = getPlateUnderPosition(gridPos)
-                if not plate then
-                    plate = createPlate(gridPos)
-                end
-                table.insert(platesThisFrame, plate)
-            end
-        end
-
-        for i = #plates, 1, -1 do
-            local plate = plates[i]
-            if not table.find(platesThisFrame, plate) then
-                if plate and plate.Parent then
-                    plate:Destroy()
-                end
-                table.remove(plates, i)
-            end
-        end
-    end)
-end)
-
-PlateGen_Button.MouseButton1Click:Connect(function()
-    plateGenEnabled = not plateGenEnabled
-    pcall(function()
-        ChangeToggleColor(PlateGen_Button)
-    end)
-end)
-
 WalkSpeed_Button.MouseButton1Click:Connect(function()
 	pcall(function()
 		local Speed = WalkSpeed_Input.Text:gsub("%D", "")
@@ -2770,64 +2548,15 @@ JumpPower_Button.MouseButton1Click:Connect(function()
 	end)
 end)
 
-FaceSpeed_Button.MouseButton1Click:Connect(function()
-	local SpeedText = FaceSpeed_Input.Text:gsub("%D", "")
-
-	if SpeedText == "" then
-		SpeedText = "12"
-	end
-
-	FaceSpeed = tonumber(SpeedText)
-	SendNotify("Echo", "Face speed updated: " .. FaceSpeed, 5)
-end)
-
-FlyKeyBind_Button.MouseButton1Click:Connect(function()
-    FlyKeyBind_Input:ReleaseFocus()
-
-    local text = FlyKeyBind_Input.Text
-    if text == "" then
-        SendNotify("Echo", "Please enter a key", 5)
-        return
-    end
-
-    local keyEnum
-    for _, key in ipairs(Enum.KeyCode:GetEnumItems()) do
-        if key.Name:lower() == text:lower() then
-            keyEnum = key
-            break
-        end
-    end
-
-    if keyEnum then
-        FlyKey = keyEnum
-        SendNotify("Echo", "Fly key updated: " .. keyEnum.Name, 5)
-    else
-        SendNotify("Echo", "Invalid key: " .. text, 5)
-    end
-end)
-
-TeleportKeyBind_Button.MouseButton1Click:Connect(function()
-    TeleportKeyBind_Input:ReleaseFocus()
-    local text = TeleportKeyBind_Input.Text
-    if text == "" then
-        SendNotify("Echo", "Please enter a key", 5)
-        return
-    end
-
-    local keyEnum
-    for _, key in ipairs(Enum.KeyCode:GetEnumItems()) do
-        if key.Name:lower() == text:lower() then
-            keyEnum = key
-            break
-        end
-    end
-
-    if keyEnum then
-        TELEPORT_KEY = keyEnum
-        SendNotify("Echo", "Teleport key updated: " .. keyEnum.Name, 5)
-    else
-        SendNotify("Echo", "Invalid key: " .. text, 5)
-    end
+FlySpeed_Button.MouseButton1Click:Connect(function()
+	pcall(function()
+		local Speed = FlySpeed_Input.Text:gsub("%D", "")
+		if Speed == "" then
+			Speed = 50
+		end
+		FlySpeed = tonumber(Speed)
+		SendNotify("Echo","Fly speed updated.",5)
+	end)
 end)
 
 Respawn_Button.MouseButton1Click:Connect(function()
@@ -2847,248 +2576,128 @@ ClearCheckpoint_Button.MouseButton1Click:Connect(function()
 	SendNotify("Echo","Checkpoint cleared.",5)
 end)
 
+local flying = true
 local deb = true
 local ctrl = {f = 0, b = 0, l = 0, r = 0}
 local lastctrl = {f = 0, b = 0, l = 0, r = 0}
 local KeyDownFunction = nil
 local KeyUpFunction = nil
-local UIS = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-
-local plr = game.Players.LocalPlayer
-local mouse = plr:GetMouse()
-
-local flying = false
-
-local ctrl = {f = 0, b = 0, l = 0, r = 0}
-local lastctrl = {f = 0, b = 0, l = 0, r = 0}
-
-local KeyDownFunction
-local KeyUpFunction
-
-local function Fly()
-    local char = plr.Character
-    if not char then return end
-
-    local torso = char:FindFirstChild("UpperTorso") or char:FindFirstChild("Torso")
-    local Humanoid = char:FindFirstChildOfClass("Humanoid")
-    if not torso or not Humanoid then return end
-
-    local speed = 0
-
-    local bg = Instance.new("BodyGyro")
-    bg.P = 9e4
-    bg.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
-    bg.CFrame = torso.CFrame
-    bg.Parent = torso
-
-    local bv = Instance.new("BodyVelocity")
-    bv.Velocity = Vector3.new(0, 0.1, 0)
-    bv.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-    bv.Parent = torso
-
-    Humanoid.PlatformStand = true
-
-    while flying do
-        RunService.RenderStepped:Wait()
-
-        if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
-            speed = FlySpeed
-        else
-            speed = math.max(speed - FlySpeed * 0.1, 0)
-        end
-
-        if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
-            bv.Velocity =
-                ((workspace.CurrentCamera.CFrame.LookVector * (ctrl.f + ctrl.b)) +
-                ((workspace.CurrentCamera.CFrame * CFrame.new(ctrl.l + ctrl.r, (ctrl.f + ctrl.b) * 0.2, 0)).Position -
-                workspace.CurrentCamera.CFrame.Position)) * speed
-        else
-            bv.Velocity = Vector3.new(0, 0.1, 0)
-        end
-
-        bg.CFrame = CFrame.new(
-            torso.Position,
-            torso.Position + workspace.CurrentCamera.CFrame.LookVector
-        )
-    end
-
-    bg:Destroy()
-    bv:Destroy()
-    Humanoid.PlatformStand = false
-end
-
-local function StartFly()
-	if flying then return end
-	flying = true
-
-	ChangeToggleColor(Fly_Button)
-
-	if UIS.TouchEnabled then
-		Fly_Pad.Visible = true
-	end
-
-	KeyDownFunction = mouse.KeyDown:Connect(function(key)
-		key = key:lower()
-		if key == "w" then ctrl.f = 1 end
-		if key == "s" then ctrl.b = -1 end
-		if key == "a" then ctrl.l = -1 end
-		if key == "d" then ctrl.r = 1 end
-	end)
-
-	KeyUpFunction = mouse.KeyUp:Connect(function(key)
-		key = key:lower()
-		if key == "w" then ctrl.f = 0 end
-		if key == "s" then ctrl.b = 0 end
-		if key == "a" then ctrl.l = 0 end
-		if key == "d" then ctrl.r = 0 end
-	end)
-
-	task.spawn(Fly)
-end
-
-local function ResetFlyInputs()
-	ctrl.f = 0
-	ctrl.b = 0
-	ctrl.l = 0
-	ctrl.r = 0
-
-	keyrelease("0x57")
-	keyrelease("0x41")
-	keyrelease("0x53")
-	keyrelease("0x44")
-end
-
-local function StopFly()
-	if not flying then return end
-	flying = false
-
-	ChangeToggleColor(Fly_Button)
-
-	Fly_Pad.Visible = false
-	StopAnim()
-
-	ResetFlyInputs()
-
-	if KeyDownFunction then KeyDownFunction:Disconnect() end
-	if KeyUpFunction then KeyUpFunction:Disconnect() end
-end
-
 Fly_Button.MouseButton1Click:Connect(function()
-	if flying then
-		StopFly()
-	else
-		StartFly()
-	end
-end)
-
-UIS.InputBegan:Connect(function(input, gp)
-	if gp then return end
-	if input.KeyCode == FlyKey then
-		if flying then
-			StopFly()
-		else
-			StartFly()
+	ChangeToggleColor(Fly_Button)
+	if Fly_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(0,255,0) then
+		flying = true
+		if game:GetService("UserInputService").TouchEnabled then
+			Fly_Pad.Visible = true
 		end
+		local UpperTorso = plr.Character.UpperTorso
+		local speed = 0
+		local function Fly()
+			local bg = Instance.new("BodyGyro", UpperTorso)
+			bg.P = 9e4
+			bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+			bg.cframe = UpperTorso.CFrame
+			local bv = Instance.new("BodyVelocity", UpperTorso)
+			bv.velocity = Vector3.new(0,0.1,0)
+			bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+			PlayAnim(10714347256,4,0)
+			repeat task.wait()
+				plr.Character.Humanoid.PlatformStand = true
+				if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+					speed = speed+FlySpeed*0.10
+					if speed > FlySpeed then
+						speed = FlySpeed
+					end
+				elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+					speed = speed-FlySpeed*0.10
+					if speed < 0 then
+						speed = 0
+					end
+				end
+				if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+					bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+					lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+				elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+					bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+				else
+					bv.velocity = Vector3.new(0,0.1,0)
+				end
+				bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/FlySpeed),0,0)
+			until not flying
+			ctrl = {f = 0, b = 0, l = 0, r = 0}
+			lastctrl = {f = 0, b = 0, l = 0, r = 0}
+			speed = 0
+			bg:Destroy()
+			bv:Destroy()
+			plr.Character.Humanoid.PlatformStand = false
+		end
+
+		KeyDownFunction = mouse.KeyDown:connect(function(key)
+			if key:lower() == "w" then
+				ctrl.f = 1
+				PlayAnim(10714177846,4.65,0)
+			elseif key:lower() == "s" then
+				ctrl.b = -1
+				PlayAnim(10147823318,4.11,0)
+			elseif key:lower() == "a" then
+				ctrl.l = -1
+				PlayAnim(10147823318,3.55,0)
+			elseif key:lower() == "d" then
+				ctrl.r = 1
+				PlayAnim(10147823318,4.81,0)
+			end
+		end)
+
+		KeyUpFunction = mouse.KeyUp:connect(function(key)
+			if key:lower() == "w" then
+				ctrl.f = 0
+				PlayAnim(10714347256,4,0)
+			elseif key:lower() == "s" then
+				ctrl.b = 0
+				PlayAnim(10714347256,4,0)
+			elseif key:lower() == "a" then
+				ctrl.l = 0
+				PlayAnim(10714347256,4,0)
+			elseif key:lower() == "d" then
+				ctrl.r = 0
+				PlayAnim(10714347256,4,0)
+			end
+		end)
+		Fly()
+	else
+		flying = false
+		Fly_Pad.Visible = false
+		KeyDownFunction:Disconnect()
+		KeyUpFunction:Disconnect()
+		StopAnim()
 	end
 end)
 
 FlyAButton.MouseButton1Down:Connect(function()
 	keypress("0x41")
 end)
-FlyAButton.MouseButton1Up:Connect(function()
+FlyAButton.MouseButton1Up:Connect(function ()
 	keyrelease("0x41")
 end)
 
 FlySButton.MouseButton1Down:Connect(function()
 	keypress("0x53")
 end)
-FlySButton.MouseButton1Up:Connect(function()
+FlySButton.MouseButton1Up:Connect(function ()
 	keyrelease("0x53")
 end)
 
 FlyDButton.MouseButton1Down:Connect(function()
 	keypress("0x44")
 end)
-FlyDButton.MouseButton1Up:Connect(function()
+FlyDButton.MouseButton1Up:Connect(function ()
 	keyrelease("0x44")
 end)
 
 FlyWButton.MouseButton1Down:Connect(function()
 	keypress("0x57")
 end)
-FlyWButton.MouseButton1Up:Connect(function()
+FlyWButton.MouseButton1Up:Connect(function ()
 	keyrelease("0x57")
-end)
-
-local TELEPORT_HEIGHT_OFFSET = 3
-local MAX_GROUND_CHECK = 50
-local holdingTeleportKey = false
-
-uis.InputBegan:Connect(function(input, gp)
-    if gp then return end
-    if TELEPORT_KEY and input.KeyCode == TELEPORT_KEY then
-        holdingTeleportKey = true
-    end
-end)
-
-
-uis.InputEnded:Connect(function(input, gp)
-    if TELEPORT_KEY and input.KeyCode == TELEPORT_KEY then
-        holdingTeleportKey = false
-    end
-end)
-
-local function teleportToMouse()
-    if not TELEPORT_KEY then
-        SendNotify("Echo", "Teleport key not set!", 5)
-        return
-    end
-
-    local character = player.Character
-    if not (character and character:FindFirstChild("HumanoidRootPart")) then return end
-    local hrp = character.HumanoidRootPart
-
-    local targetPos = mouse.Hit.Position
-
-    local rayOrigin = targetPos + Vector3.new(0, MAX_GROUND_CHECK / 2, 0)
-    local rayDirection = Vector3.new(0, -MAX_GROUND_CHECK, 0)
-    local raycastParams = RaycastParams.new()
-    raycastParams.FilterDescendantsInstances = {character}
-    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-
-    local rayResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
-
-    if rayResult then
-        local groundPos = rayResult.Position
-        local finalPos = groundPos + Vector3.new(0, TELEPORT_HEIGHT_OFFSET, 0)
-
-        local lookAtPos = Vector3.new(targetPos.X, finalPos.Y, targetPos.Z)
-        local direction = (lookAtPos - hrp.Position)
-        if direction.Magnitude > 0 then
-            direction = direction.Unit
-        else
-            direction = Vector3.new(0, 0, 1)
-        end
-
-        local yaw = math.atan2(direction.X, direction.Z)
-
-        yaw = yaw + math.pi
-
-        hrp.Anchored = true
-        hrp.CFrame = CFrame.new(finalPos) * CFrame.Angles(0, yaw, 0)
-        hrp.Velocity = Vector3.zero
-        hrp.RotVelocity = Vector3.zero
-        hrp.Anchored = false
-    else
-        SendNotify("Echo", "No ground detected under the mouse! Teleport canceled.", 5)
-    end
-end
-
-mouse.Button1Down:Connect(function()
-    if TELEPORT_KEY and holdingTeleportKey then
-        teleportToMouse()
-    end
 end)
 
 --TARGET
@@ -3690,73 +3299,13 @@ ZombieFEAnim_Button.MouseButton1Click:Connect(function()
 	Animate.Disabled = false
 end)
 
-AuraAnim_Button.MouseButton1Click:Connect(function()
-	local Animate = plr.Character.Animate
-	Animate.Disabled = true
-	StopAnim()
-	Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=110211186840347"
-	Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=114191137265065"
-	Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=83842218823011"
-	Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=118320322718866"
-	Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=109996626521204"
-	Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=97824616490448"
-	Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=95603166884636"
-	plr.Character.Humanoid:ChangeState(3)
-	Animate.Disabled = false
-end)
-
-CommunityAnim_Button.MouseButton1Click:Connect(function()
-	local Animate = plr.Character.Animate
-	Animate.Disabled = true
-	StopAnim()
-	Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=122257458498464"
-	Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=102357151005774"
-	Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=122150855457006"
-	Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=82598234841035"
-	Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=75290611992385"
-	Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=88763136693023"
-	Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=98600215928904"
-	plr.Character.Humanoid:ChangeState(3)
-	Animate.Disabled = false
-end)
-
-OldAnim_Button.MouseButton1Click:Connect(function()
-	local Animate = plr.Character.Animate
-	Animate.Disabled = true
-	StopAnim()
-	Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=10921230744"
-	Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=10921232093"
-	Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=10921244891"
-	Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=10921240218"
-	Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=10921242013"
-	Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=10921229866"
-	Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=10921241244"
-	plr.Character.Humanoid:ChangeState(3)
-	Animate.Disabled = false
-end)
-
-PopularAnim_Button.MouseButton1Click:Connect(function()
-	local Animate = plr.Character.Animate
-	Animate.Disabled = true
-	StopAnim()
-	Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=118832222982049"
-	Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=76049494037641"
-	Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=92072849924640"
-	Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=72301599441680"
-	Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=104325245285198"
-	Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=131326830509784"
-	Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=121152442762481"
-	plr.Character.Humanoid:ChangeState(3)
-	Animate.Disabled = false
-end)
-
 --MISC
 
 AntiFling_Button.MouseButton1Click:Connect(function()
 	ChangeToggleColor(AntiFling_Button)
 	if AntiFling_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(0,255,0) then
 		_G.AntiFlingToggled = true
-		SendNotify("Echo","Anti Fling No Longer Works Since Old Code Is Lost",5)
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/H20CalibreYT/SystemBroken/main/AntiFling'))()
 	else
 		_G.AntiFlingToggled = false
 	end
@@ -3813,7 +3362,7 @@ Shaders_Button.MouseButton1Click:Connect(function()
 		Bloom.Threshold = 0.8
 		Bloom.Parent = Light
 
-		Blur.Size = 3
+		Blur.Size = 5
 		Blur.Parent = Light
 
 		ColorC.Brightness = 0
@@ -3854,6 +3403,10 @@ InfYield_Button.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
 end)
 
+CMDX_Button.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source",true))()
+end)
+
 Explode_Button.MouseButton1Click:Connect(function()
 	ToggleRagdoll(false)
 	task.wait()
@@ -3865,6 +3418,14 @@ Explode_Button.MouseButton1Click:Connect(function()
 	bav.AngularVelocity = Vector3.new(0,150,0)
 	task.wait(3)
 	plr.Character.Humanoid:ChangeState(15)
+end)
+
+FreeEmotes_Button.MouseButton1Click:Connect(function()
+	if not FreeEmotesEnabled then
+		FreeEmotesEnabled = true
+		SendNotify("Echo","Loading free emotes.\nCredits: Gi#7331")
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/H20CalibreYT/SystemBroken/main/AllEmotes"))()
+	end
 end)
 
 Rejoin_Button.MouseButton1Click:Connect(function()
@@ -3887,6 +3448,12 @@ Serverhop_Button.MouseButton1Click:Connect(function()
 			game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], plr)
 		end
 	end
+end)
+
+ChatBox_Input.FocusLost:Connect(function()
+	local args = {[1] = ChatBox_Input.Text,[2] = "All"}
+	game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args))
+	ChatBox_Input.Text = ""
 end)
 
 --GUI Functions
@@ -3929,10 +3496,6 @@ plr.CharacterAdded:Connect(function(x)
 		KeyUpFunction:Disconnect()
 		SendNotify("Echo","Fly was automatically disabled due to your character respawn",5)
 	end
-
-if player.Character then
-    connectDeathListener(player.Character)
-end
 	x.Humanoid.Died:Connect(function()
 		pcall(function()
 			x["Pushed"].Disabled = false
@@ -3943,12 +3506,12 @@ end
 	local appearance = players:GetCharacterAppearanceAsync(plr.UserId)
 	local original_accs = {}
 	local accs = {}
-	for i,acc in pairs(appearance:GetChildren()) do
+	for i,acc in pairs(appearance:GetChildren()) do --Save original accessoryes
 		if acc:IsA("Accessory") then
 			table.insert(original_accs, acc.Name)
 		end
 	end
-	for i,acc in pairs(plr.Character:GetChildren()) do
+	for i,acc in pairs(plr.Character:GetChildren()) do --Save player accessoryes
 		if acc:IsA("Accessory") then
 			table.insert(accs, acc.Name)
 		end
@@ -3976,40 +3539,9 @@ end
 	appearance:Destroy()
 end)
 
-local function connectPlateGenDeath(character)
-    local humanoid = character:WaitForChild("Humanoid")
-
-    humanoid.Died:Connect(function()
-        if PlateGen_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(0,255,0) then
-            ChangeToggleColor(PlateGen_Button)
-            plateGenEnabled = false
-
-            for i = #plates, 1, -1 do
-                local plate = plates[i]
-                if plate and plate.Parent then
-                    plate:Destroy()
-                end
-                table.remove(plates, i)
-            end
-
-            SendNotify(
-                "Echo",
-                "Plate Generator was automatically disabled due to your character respawn",
-                5
-            )
-        end
-    end)
-end
-
--- Hook into respawns
-player.CharacterAdded:Connect(function(character)
-    connectPlateGenDeath(character)
+OpenClose.MouseButton1Click:Connect(function()
+	Background.Visible = not Background.Visible
 end)
-
--- Hook current character
-if player.Character then
-    connectPlateGenDeath(player.Character)
-end
 
 game:GetService("UserInputService").InputBegan:Connect(function(input,gameProcessedEvent)
 	if gameProcessedEvent then return end
