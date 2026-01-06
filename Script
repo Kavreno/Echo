@@ -3,7 +3,7 @@ if game.CoreGui:FindFirstChild("SysBroker") then
 	game:GetService("StarterGui")
 	return
 end
-local version = 5
+local version = 4
 --VARIABLES
 _G.AntiFlingToggled = false
 local Players = game:GetService("Players")
@@ -950,7 +950,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Added Face Bang"
+Announce_Label.Text = "Added Plate Gen"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -3171,7 +3171,7 @@ FaceTarget_Button.MouseButton1Click:Connect(function()
 
 			local baseDistance = 1.1   -- distance in front of target
 			local thrustDistance = 0.6 -- forward/back motion depth
-			local thrustSpeed = 8      -- speed of back/forth
+			local thrustSpeed = 12      -- speed of back/forth
 			local yOffset = 0.5        -- slightly above head
 
 			local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
