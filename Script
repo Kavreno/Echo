@@ -3259,13 +3259,7 @@ end)
 --MISC
 
 AntiFling_Button.MouseButton1Click:Connect(function()
-	ChangeToggleColor(AntiFling_Button)
-	if AntiFling_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(0,255,0) then
-		_G.AntiFlingToggled = true
-		loadstring(game:HttpGet('https://raw.githubusercontent.com/H20CalibreYT/SystemBroken/main/AntiFling'))()
-	else
-		_G.AntiFlingToggled = false
-	end
+    SendNotify("Echo", "AntiFling No Longer Works Since I lost The Script", 5)
 end)
 
 AntiChatSpy_Button.MouseButton1Click:Connect(function()
