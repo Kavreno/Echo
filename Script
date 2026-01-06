@@ -2781,16 +2781,6 @@ FaceSpeed_Button.MouseButton1Click:Connect(function()
 	SendNotify("Echo", "Face speed updated: " .. FaceSpeed, 5)
 end)
 
-local function getFaceSpeed()
-	local speed = tonumber(FaceSpeed_Input.Text)
-
-	if not speed then
-		return 12 -- default
-	end
-
-	return math.clamp(speed, 1, 99999)
-end
-
 FlyKeyBind_Button.MouseButton1Click:Connect(function()
     FlyKeyBind_Input:ReleaseFocus()
 
@@ -3209,55 +3199,6 @@ BenxTarget_Button.MouseButton1Click:Connect(function()
 			end
 		end
 	end
-end)
-
-FaceTarget_Button.MouseButton1Click:Connect(function()
-	if not TargetedPlayer then return end
-
-	ChangeToggleColor(FaceTarget_Button)
-
-	if FaceTarget_Button.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0,255,0) then
-		return
-	end
-
-	local baseDistance = 1.1
-	local thrustDistance = 0.6
-	local yOffset = 0.7
-
-	repeat
-		pcall(function()
-			local myRoot = GetRoot(plr)
-			local targetChar = Players[TargetedPlayer].Character
-			local targetRoot = targetChar and targetChar:FindFirstChild("HumanoidRootPart")
-			local targetHead = targetChar and targetChar:FindFirstChild("Head")
-
-			for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
-				track:Stop()
-			end
-
-			if not (myRoot and targetRoot and targetHead) then return end
-
-			local thrust = math.sin(tick() * FaceSpeed) * thrustDistance
-
-			local targetLook = Vector3.new(
-				targetRoot.CFrame.LookVector.X,
-				0,
-				targetRoot.CFrame.LookVector.Z
-			).Unit
-
-			local rotatedLook = -targetLook
-
-			local finalPos =
-				targetHead.Position
-				+ Vector3.new(0, yOffset, 0)
-				- rotatedLook * (baseDistance + thrust)
-
-			myRoot.CFrame = CFrame.new(finalPos, finalPos + rotatedLook)
-			myRoot.Velocity = Vector3.zero
-		end)
-
-		task.wait()
-	until FaceTarget_Button.Ticket_Asset.ImageColor3 == Color3.fromRGB(255,0,0)
 end)
 
 HeadsitTarget_Button.MouseButton1Click:Connect(function()
