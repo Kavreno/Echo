@@ -3319,7 +3319,7 @@ Shaders_Button.MouseButton1Click:Connect(function()
 		Bloom.Threshold = 0.8
 		Bloom.Parent = Light
 
-		Blur.Size = 5
+		Blur.Size = 3
 		Blur.Parent = Light
 
 		ColorC.Brightness = 0
@@ -3381,7 +3381,7 @@ FreeEmotes_Button.MouseButton1Click:Connect(function()
 	if not FreeEmotesEnabled then
 		FreeEmotesEnabled = true
 		SendNotify("Echo","Loading free emotes.\nCredits: Gi#7331")
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/H20CalibreYT/SystemBroken/main/AllEmotes"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Gi7331/scripts/main/Emote.lua"))()
 	end
 end)
 
