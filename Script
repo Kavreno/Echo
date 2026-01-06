@@ -4,7 +4,7 @@ if game.CoreGui:FindFirstChild("SysBroker") then
 	game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Echo",Text = "GUI Already loaded, rejoin to re-execute",Duration = 5;})
 	return
 end
-local version = 2
+local version = 3
 
 --VARIABLES
 
@@ -27,6 +27,7 @@ local MinesFolder = nil
 local FreeEmotesEnabled = false
 local CannonsFolders = {}
 local FlyToggleKey = nil
+local HoldKey = nil
 
 pcall(function()
 	MinesFolder = game:GetService("Workspace").Landmines
@@ -311,6 +312,8 @@ local FlySpeed_Input = Instance.new("TextBox")
 local FlyKey_Button = Instance.new("TextButton")
 local FlyKey_Input = Instance.new("TextBox")
 local Fly_Button = Instance.new("TextButton")
+local TeleportKey_Button = Instance.new("TextButton")
+local TeleportKey_Input = Instance.new("TextBox")
 local Target_Section = Instance.new("ScrollingFrame")
 local TargetImage = Instance.new("ImageLabel")
 local ClickTargetTool_Button = Instance.new("ImageButton")
@@ -938,7 +941,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Readded my fly Keybinding and teleport is not rebindable but is bound to q by default!"
+Announce_Label.Text = "Added Teleport Binding And Better Teleport Thanks to Infinite Yield Script And Fly Binding. Will Be Making Plate Gen Again"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -955,7 +958,7 @@ Character_Section.BorderSizePixel = 0
 Character_Section.Position = UDim2.new(0, 105, 0, 30)
 Character_Section.Size = UDim2.new(0, 395, 0, 320)
 Character_Section.Visible = false
-Character_Section.CanvasSize = UDim2.new(0, 0, 1, 0)
+Character_Section.CanvasSize = UDim2.new(0, 0, 1.5, 0)
 Character_Section.ScrollBarThickness = 5
 
 WalkSpeed_Button.Name = "WalkSpeed_Button"
@@ -994,7 +997,7 @@ ClearCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 ClearCheckpoint_Button.BackgroundTransparency = 0.500
 ClearCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ClearCheckpoint_Button.BorderSizePixel = 0
-ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 275)
+ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 325)
 ClearCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 ClearCheckpoint_Button.Font = Enum.Font.Oswald
 ClearCheckpoint_Button.Text = "Clear checkpoint"
@@ -1039,7 +1042,7 @@ SaveCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 SaveCheckpoint_Button.BackgroundTransparency = 0.500
 SaveCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SaveCheckpoint_Button.BorderSizePixel = 0
-SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 225)
+SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 275)
 SaveCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 SaveCheckpoint_Button.Font = Enum.Font.Oswald
 SaveCheckpoint_Button.Text = "Save checkpoint"
@@ -1054,7 +1057,7 @@ Respawn_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 Respawn_Button.BackgroundTransparency = 0.500
 Respawn_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Respawn_Button.BorderSizePixel = 0
-Respawn_Button.Position = UDim2.new(0, 25, 0, 275)
+Respawn_Button.Position = UDim2.new(0, 25, 0, 325)
 Respawn_Button.Size = UDim2.new(0, 150, 0, 30)
 Respawn_Button.Font = Enum.Font.Oswald
 Respawn_Button.Text = "Respawn"
@@ -1129,7 +1132,7 @@ Fly_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 Fly_Button.BackgroundTransparency = 0.500
 Fly_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Fly_Button.BorderSizePixel = 0
-Fly_Button.Position = UDim2.new(0, 25, 0, 225)
+Fly_Button.Position = UDim2.new(0, 25, 0, 275)
 Fly_Button.Size = UDim2.new(0, 150, 0, 30)
 Fly_Button.Font = Enum.Font.Oswald
 Fly_Button.Text = "Fly"
@@ -1137,6 +1140,36 @@ Fly_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
 Fly_Button.TextScaled = true
 Fly_Button.TextSize = 14.000
 Fly_Button.TextWrapped = true
+
+TeleportKey_Button.Name = "TeleportKey_Button"
+TeleportKey_Button.Parent = Character_Section
+TeleportKey_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+TeleportKey_Button.BackgroundTransparency = 0.500
+TeleportKey_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TeleportKey_Button.BorderSizePixel = 0
+TeleportKey_Button.Position = UDim2.new(0, 25, 0, 225)
+TeleportKey_Button.Size = UDim2.new(0, 150, 0, 30)
+TeleportKey_Button.Font = Enum.Font.Oswald
+TeleportKey_Button.Text = "Teleport key"
+TeleportKey_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+TeleportKey_Button.TextScaled = true
+TeleportKey_Button.TextSize = 14.000
+TeleportKey_Button.TextWrapped = true
+
+TeleportKey_Input.Name = "TeleportKey_Input"
+TeleportKey_Input.Parent = Character_Section
+TeleportKey_Input.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+TeleportKey_Input.BackgroundTransparency = 0.300
+TeleportKey_Input.BorderColor3 = Color3.fromRGB(100, 100, 100)
+TeleportKey_Input.Position = UDim2.new(0, 210, 0, 225)
+TeleportKey_Input.Size = UDim2.new(0, 175, 0, 30)
+TeleportKey_Input.Font = Enum.Font.Gotham
+TeleportKey_Input.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
+TeleportKey_Input.PlaceholderText = "Press Any Letter"
+TeleportKey_Input.Text = ""
+TeleportKey_Input.TextColor3 = Color3.fromRGB(20, 20, 20)
+TeleportKey_Input.TextSize = 14.000
+TeleportKey_Input.TextWrapped = true
 
 Target_Section.Name = "Target_Section"
 Target_Section.Parent = Background
@@ -2067,6 +2100,8 @@ CreateClicker(SaveCheckpoint_Button)
 CreateClicker(Respawn_Button)
 CreateClicker(FlySpeed_Button)
 CreateClicker(FlyKey_Button)
+CreateClicker(TeleportKey_Button)
+
 
 CreateToggle(ViewTarget_Button)
 CreateToggle(FlingTarget_Button)
@@ -2570,6 +2605,30 @@ FlyKey_Button.MouseButton1Click:Connect(function()
     end)
 end)
 
+local function StringToKeyCode(str)
+	if not str then return nil end
+	str = str:upper()
+	for _, enumKey in ipairs(Enum.KeyCode:GetEnumItems()) do
+		if enumKey.Name:upper() == str then
+			return enumKey
+		end
+	end
+	return nil
+end
+
+TeleportKey_Button.MouseButton1Click:Connect(function()
+	pcall(function()
+		local keyText = TeleportKey_Input.Text
+		local keyEnum = StringToKeyCode(keyText)
+		if keyEnum then
+			HoldKey = keyEnum
+			SendNotify("Echo","Teleport key updated to "..keyEnum.Name,5)
+		else
+			SendNotify("Echo","Invalid key entered.",5)
+		end
+	end)
+end)
+
 Respawn_Button.MouseButton1Click:Connect(function()
 	local RsP = GetRoot(plr).Position
 	plr.Character.Humanoid.Health = 0
@@ -2699,11 +2758,12 @@ local getRoot = function(character)
 	return character:FindFirstChild("HumanoidRootPart")
 end
 
-local holdQ = false
+local holdKeyPressed = false
 
 local function clicktpFunc()
 	pcall(function()
 		local character = Players.LocalPlayer.Character
+		if not character then return end
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if humanoid and humanoid.SeatPart then
 			humanoid.Sit = false
@@ -2712,6 +2772,7 @@ local function clicktpFunc()
 
 		local hipHeight = humanoid and humanoid.HipHeight > 0 and (humanoid.HipHeight + 1)
 		local rootPart = getRoot(character)
+		if not rootPart then return end
 		local rootPartPosition = rootPart.Position
 		local hitPosition = IYMouse.Hit.Position
 		local newCFrame = CFrame.new(
@@ -2724,19 +2785,19 @@ local function clicktpFunc()
 end
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-	if input.KeyCode == Enum.KeyCode.Q then
-		holdQ = true
+	if HoldKey and input.KeyCode == HoldKey then
+		holdKeyPressed = true
 	end
 end)
 
 UserInputService.InputEnded:Connect(function(input, gameProcessed)
-	if input.KeyCode == Enum.KeyCode.Q then
-		holdQ = false
+	if HoldKey and input.KeyCode == HoldKey then
+		holdKeyPressed = false
 	end
 end)
 
 IYMouse.Button1Down:Connect(function()
-	if holdQ then
+	if holdKeyPressed then
 		clicktpFunc()
 	end
 end)
