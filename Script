@@ -24,7 +24,7 @@ local FlySpeed = 50
 local PotionTool = nil
 local SavedCheckpoint = nil
 local MinesFolder = nil
-local FreeEmotesEnabled = false
+local OldEmotesEnabled = false
 local CannonsFolders = {}
 local FlyToggleKey = nil
 local HoldKey = nil
@@ -361,11 +361,11 @@ local Shaders_Button = Instance.new("TextButton")
 local Day_Button = Instance.new("TextButton")
 local Night_Button = Instance.new("TextButton")
 local Rejoin_Button = Instance.new("TextButton")
-local CMDX_Button = Instance.new("TextButton")
+local EmoteWheel_Button = Instance.new("TextButton")
 local InfYield_Button = Instance.new("TextButton")
 local Serverhop_Button = Instance.new("TextButton")
 local Explode_Button = Instance.new("TextButton")
-local FreeEmotes_Button = Instance.new("TextButton")
+local OldEmotes_Button = Instance.new("TextButton")
 local Credits_Section = Instance.new("ScrollingFrame")
 local Credits_Label = Instance.new("TextLabel")
 local Assets = Instance.new("Folder")
@@ -941,7 +941,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Fixed Animations Still Playing When Flying"
+Announce_Label.Text = "Added Emote Wheel Script Thanks 7yd7, Changed Free Emotes Name to Old emotes, Made fly Snappier"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -1874,20 +1874,20 @@ Rejoin_Button.TextScaled = true
 Rejoin_Button.TextSize = 14.000
 Rejoin_Button.TextWrapped = true
 
-CMDX_Button.Name = "CMDX_Button"
-CMDX_Button.Parent = Misc_Section
-CMDX_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-CMDX_Button.BackgroundTransparency = 0.500
-CMDX_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-CMDX_Button.BorderSizePixel = 0
-CMDX_Button.Position = UDim2.new(0, 210, 0, 175)
-CMDX_Button.Size = UDim2.new(0, 150, 0, 30)
-CMDX_Button.Font = Enum.Font.Oswald
-CMDX_Button.Text = "CMDX"
-CMDX_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-CMDX_Button.TextScaled = true
-CMDX_Button.TextSize = 14.000
-CMDX_Button.TextWrapped = true
+EmoteWheel_Button.Name = "EmoteWheel_Button"
+EmoteWheel_Button.Parent = Misc_Section
+EmoteWheel_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+EmoteWheel_Button.BackgroundTransparency = 0.500
+EmoteWheel_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+EmoteWheel_Button.BorderSizePixel = 0
+EmoteWheel_Button.Position = UDim2.new(0, 210, 0, 175)
+EmoteWheel_Button.Size = UDim2.new(0, 150, 0, 30)
+EmoteWheel_Button.Font = Enum.Font.Oswald
+EmoteWheel_Button.Text = "Emote Wheel"
+EmoteWheel_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+EmoteWheel_Button.TextScaled = true
+EmoteWheel_Button.TextSize = 14.000
+EmoteWheel_Button.TextWrapped = true
 
 InfYield_Button.Name = "InfYield_Button"
 InfYield_Button.Parent = Misc_Section
@@ -1904,20 +1904,20 @@ InfYield_Button.TextScaled = true
 InfYield_Button.TextSize = 14.000
 InfYield_Button.TextWrapped = true
 
-FreeEmotes_Button.Name = "FreeEmotes_Button"
-FreeEmotes_Button.Parent = Misc_Section
-FreeEmotes_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-FreeEmotes_Button.BackgroundTransparency = 0.500
-FreeEmotes_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-FreeEmotes_Button.BorderSizePixel = 0
-FreeEmotes_Button.Position = UDim2.new(0, 210, 0, 225)
-FreeEmotes_Button.Size = UDim2.new(0, 150, 0, 30)
-FreeEmotes_Button.Font = Enum.Font.Oswald
-FreeEmotes_Button.Text = "Free emotes"
-FreeEmotes_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-FreeEmotes_Button.TextScaled = true
-FreeEmotes_Button.TextSize = 14.000
-FreeEmotes_Button.TextWrapped = true
+OldEmotes_Button.Name = "OldEmotes_Button"
+OldEmotes_Button.Parent = Misc_Section
+OldEmotes_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+OldEmotes_Button.BackgroundTransparency = 0.500
+OldEmotes_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+OldEmotes_Button.BorderSizePixel = 0
+OldEmotes_Button.Position = UDim2.new(0, 210, 0, 225)
+OldEmotes_Button.Size = UDim2.new(0, 150, 0, 30)
+OldEmotes_Button.Font = Enum.Font.Oswald
+OldEmotes_Button.Text = "Old emotes"
+OldEmotes_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+OldEmotes_Button.TextScaled = true
+OldEmotes_Button.TextSize = 14.000
+OldEmotes_Button.TextWrapped = true
 
 Serverhop_Button.Name = "Serverhop_Button"
 Serverhop_Button.Parent = Misc_Section
@@ -2145,9 +2145,9 @@ CreateToggle(Shaders_Button)
 CreateClicker(Day_Button)
 CreateClicker(Night_Button)
 CreateClicker(Rejoin_Button)
-CreateClicker(CMDX_Button)
+CreateClicker(EmoteWheel_Button)
 CreateClicker(Explode_Button)
-CreateClicker(FreeEmotes_Button)
+CreateClicker(OldEmotes_Button)
 CreateClicker(InfYield_Button)
 CreateClicker(Serverhop_Button)
 
@@ -2682,7 +2682,7 @@ local function Fly()
     local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
 
     local bg = Instance.new("BodyGyro")
-    bg.P = 9000
+    bg.P = 1e5
     bg.maxTorque = Vector3.new(400000, 400000, 400000)
     bg.CFrame = CFrame.new(torso.Position, torso.Position + workspace.CurrentCamera.CFrame.LookVector)
     bg.Parent = torso
@@ -2698,7 +2698,6 @@ local function Fly()
     while flying and torso.Parent do
         task.wait()
 
-        -- Freeze all animations every frame
         if humanoid then
             for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
                 track:Stop()
@@ -2706,14 +2705,12 @@ local function Fly()
             humanoid.Jump = false
         end
 
-        -- Handle speed based on input
         if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
             speed = math.clamp(speed + FlySpeed * 0.1, 0, FlySpeed)
         else
             speed = math.clamp(speed - FlySpeed * 0.1, 0, FlySpeed)
         end
 
-        -- Movement velocity calculation
         if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
             bv.velocity = ((workspace.CurrentCamera.CFrame.LookVector * (ctrl.f + ctrl.b)) +
                 ((workspace.CurrentCamera.CFrame * CFrame.new(ctrl.l + ctrl.r, (ctrl.f + ctrl.b) * 0.2, 0).p) - workspace.CurrentCamera.CFrame.p)) * speed
@@ -2725,11 +2722,9 @@ local function Fly()
             bv.velocity = Vector3.new(0, 0.1, 0)
         end
 
-        -- Keep camera-facing rotation
         bg.CFrame = CFrame.new(torso.Position, torso.Position + workspace.CurrentCamera.CFrame.LookVector)
     end
 
-    -- Cleanup
     bg:Destroy()
     bv:Destroy()
     if humanoid then
@@ -3550,8 +3545,8 @@ InfYield_Button.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
 end)
 
-CMDX_Button.MouseButton1Click:Connect(function()	
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source", true))()
+EmoteWheel_Button.MouseButton1Click:Connect(function()	
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/7yd7/Hub/refs/heads/Branch/GUIS/Emotes.lua"))()
 end)
 
 Explode_Button.MouseButton1Click:Connect(function()
@@ -3567,9 +3562,9 @@ Explode_Button.MouseButton1Click:Connect(function()
 	plr.Character.Humanoid:ChangeState(15)
 end)
 
-FreeEmotes_Button.MouseButton1Click:Connect(function()
-	if not FreeEmotesEnabled then
-		FreeEmotesEnabled = true
+OldEmotes_Button.MouseButton1Click:Connect(function()
+	if not OldEmotesEnabled then
+		OldEmotesEnabled = true
 		SendNotify("Echo","Loading free emotes.\nCredits: Gi#7331")
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/Gi7331/scripts/main/Emote.lua"))()
 	end
