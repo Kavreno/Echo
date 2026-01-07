@@ -365,7 +365,6 @@ local WickedAnim_Button = Instance.new("TextButton")
 local BubblyAnim_Button = Instance.new("TextButton")
 local RobotAnim_Button = Instance.new("TextButton")
 local NFLAnim_Button = Instance.new("TextButton")
-local SuperheroAnim_Button = Instance.new("TextButton")
 local BoldAnim_Button = Instance.new("TextButton")
 local BoundariesAnim_Button = Instance.new("TextButton")
 local RthroAnim_Button = Instance.new("TextButton")
@@ -1938,21 +1937,6 @@ NFLAnim_Button.TextScaled = true
 NFLAnim_Button.TextSize = 14.000
 NFLAnim_Button.TextWrapped = true
 
-SuperheroAnim_Button.Name = "SuperheroAnim_Button"
-SuperheroAnim_Button.Parent = Animations_Section
-SuperheroAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-SuperheroAnim_Button.BackgroundTransparency = 0.500
-SuperheroAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-SuperheroAnim_Button.BorderSizePixel = 0
-SuperheroAnim_Button.Position = UDim2.new(0, 25, 0, 825)
-SuperheroAnim_Button.Size = UDim2.new(0, 150, 0, 30)
-SuperheroAnim_Button.Font = Enum.Font.Oswald
-SuperheroAnim_Button.Text = "Superhero"
-SuperheroAnim_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-SuperheroAnim_Button.TextScaled = true
-SuperheroAnim_Button.TextSize = 14.000
-SuperheroAnim_Button.TextWrapped = true
-
 BoldAnim_Button.Name = "BoldAnim_Button"
 BoldAnim_Button.Parent = Animations_Section
 BoldAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
@@ -1974,7 +1958,7 @@ BoundariesAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 BoundariesAnim_Button.BackgroundTransparency = 0.500
 BoundariesAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 BoundariesAnim_Button.BorderSizePixel = 0
-BoundariesAnim_Button.Position = UDim2.new(0, 25, 0, 875)
+BoundariesAnim_Button.Position = UDim2.new(0, 25, 0, 825)
 BoundariesAnim_Button.Size = UDim2.new(0, 150, 0, 30)
 BoundariesAnim_Button.Font = Enum.Font.Oswald
 BoundariesAnim_Button.Text = "Boundaries"
@@ -1989,7 +1973,7 @@ RthroAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 RthroAnim_Button.BackgroundTransparency = 0.500
 RthroAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 RthroAnim_Button.BorderSizePixel = 0
-RthroAnim_Button.Position = UDim2.new(0, 210, 0, 925)
+RthroAnim_Button.Position = UDim2.new(0, 25, 0, 925)
 RthroAnim_Button.Size = UDim2.new(0, 150, 0, 30)
 RthroAnim_Button.Font = Enum.Font.Oswald
 RthroAnim_Button.Text = "Rthro"
@@ -2004,7 +1988,7 @@ RealisticAnim_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 RealisticAnim_Button.BackgroundTransparency = 0.500
 RealisticAnim_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 RealisticAnim_Button.BorderSizePixel = 0
-RealisticAnim_Button.Position = UDim2.new(0, 25, 0, 925)
+RealisticAnim_Button.Position = UDim2.new(0, 25, 0, 875)
 RealisticAnim_Button.Size = UDim2.new(0, 150, 0, 30)
 RealisticAnim_Button.Font = Enum.Font.Oswald
 RealisticAnim_Button.Text = "Realistic"
@@ -2421,7 +2405,6 @@ CreateClicker(WickedAnim_Button)
 CreateClicker(BubblyAnim_Button)
 CreateClicker(RobotAnim_Button)
 CreateClicker(NFLAnim_Button)
-CreateClicker(SuperheroAnim_Button)
 CreateClicker(BoldAnim_Button)
 CreateClicker(BoundariesAnim_Button)
 CreateClicker(RthroAnim_Button)
@@ -3912,21 +3895,6 @@ NFLAnim_Button.MouseButton1Click:Connect(function()
 	Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=119846112151352"
 	Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=134630013742019"
 	Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=129773241321032"
-	plr.Character.Humanoid:ChangeState(3)
-	Animate.Disabled = false
-end)
-
-SuperheroAnim_Button.MouseButton1Click:Connect(function()
-	local Animate = plr.Character.Animate
-	Animate.Disabled = true
-	StopAnim()
-	Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=10921288909"
-	Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=10921290167"
-	Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=10921298616"
-	Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=10921291831"
-	Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=10921294559"
-	Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=10921286911"
-	Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=10921293373"
 	plr.Character.Humanoid:ChangeState(3)
 	Animate.Disabled = false
 end)
