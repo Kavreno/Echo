@@ -323,7 +323,6 @@ local FlySpeed_Input = Instance.new("TextBox")
 local FlyKey_Button = Instance.new("TextButton")
 local FlyKey_Input = Instance.new("TextBox")
 local Fly_Button = Instance.new("TextButton")
-local Noclip_Button = Instance.new("TextButton")
 local TeleportKey_Button = Instance.new("TextButton")
 local TeleportKey_Input = Instance.new("TextBox")
 local Target_Section = Instance.new("ScrollingFrame")
@@ -969,7 +968,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Added Jerk Tool And Noclip Button Doesnt Work Yet"
+Announce_Label.Text = "Won't Be Updating This Script Anymore And Will Be Working On My Own The Dosen't Leach Off System Broken Code"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -1025,7 +1024,7 @@ ClearCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 ClearCheckpoint_Button.BackgroundTransparency = 0.500
 ClearCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ClearCheckpoint_Button.BorderSizePixel = 0
-ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 375)
+ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 325)
 ClearCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 ClearCheckpoint_Button.Font = Enum.Font.Oswald
 ClearCheckpoint_Button.Text = "Clear checkpoint"
@@ -1070,7 +1069,7 @@ SaveCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 SaveCheckpoint_Button.BackgroundTransparency = 0.500
 SaveCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SaveCheckpoint_Button.BorderSizePixel = 0
-SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 325)
+SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 275)
 SaveCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 SaveCheckpoint_Button.Font = Enum.Font.Oswald
 SaveCheckpoint_Button.Text = "Save checkpoint"
@@ -1183,21 +1182,6 @@ Fly_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
 Fly_Button.TextScaled = true
 Fly_Button.TextSize = 14.000
 Fly_Button.TextWrapped = true
-
-Noclip_Button.Name = "Noclip_Button"
-Noclip_Button.Parent = Character_Section
-Noclip_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-Noclip_Button.BackgroundTransparency = 0.500
-Noclip_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Noclip_Button.BorderSizePixel = 0
-Noclip_Button.Position = UDim2.new(0, 210, 0, 275)
-Noclip_Button.Size = UDim2.new(0, 150, 0, 30)
-Noclip_Button.Font = Enum.Font.Oswald
-Noclip_Button.Text = "Noclip"
-Noclip_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-Noclip_Button.TextScaled = true
-Noclip_Button.TextSize = 14.000
-Noclip_Button.TextWrapped = true
 
 TeleportKey_Button.Name = "TeleportKey_Button"
 TeleportKey_Button.Parent = Character_Section
@@ -2391,7 +2375,6 @@ CreateClicker(SkyscraperTP_Button)
 CreateClicker(PoolTP_Button)
 
 CreateToggle(Fly_Button)
-CreateToggle(Noclip_Button)
 CreateClicker(WalkSpeed_Button)
 CreateClicker(ClearCheckpoint_Button)
 CreateClicker(JumpPower_Button)
@@ -2923,11 +2906,6 @@ FlyKey_Button.MouseButton1Click:Connect(function()
             end
         end
     end)
-end)
-
-Noclip_Button.MouseButton1Click:Connect(function()
-	ChangeToggleColor(Noclip_Button)
-	setNoclip(not noclip)
 end)
 
 local function StringToKeyCode(str)
