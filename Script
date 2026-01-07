@@ -14,6 +14,7 @@ local plr = Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Light = game:GetService("Lighting")
+local player = Players.LocalPlayer
 local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
 local flying = false
@@ -316,6 +317,7 @@ local JumpPower_Input = Instance.new("TextBox")
 local JumpPower_Button = Instance.new("TextButton")
 local SaveCheckpoint_Button = Instance.new("TextButton")
 local Respawn_Button = Instance.new("TextButton")
+local Jerk_Button = Instance.new("TextButton")
 local FlySpeed_Button = Instance.new("TextButton")
 local FlySpeed_Input = Instance.new("TextBox")
 local FlyKey_Button = Instance.new("TextButton")
@@ -967,7 +969,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Made Old Emotes Display Keybind In Notification And Added Noclip Button Doesnt Work Yet"
+Announce_Label.Text = "Added Jerk Tool And Noclip Button Doesnt Work Yet"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -1091,6 +1093,21 @@ Respawn_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
 Respawn_Button.TextScaled = true
 Respawn_Button.TextSize = 14.000
 Respawn_Button.TextWrapped = true
+
+Jerk_Button.Name = "Jerk_Button"
+Jerk_Button.Parent = Character_Section
+Jerk_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Jerk_Button.BackgroundTransparency = 0.500
+Jerk_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Jerk_Button.BorderSizePixel = 0
+Jerk_Button.Position = UDim2.new(0, 25, 0, 375)
+Jerk_Button.Size = UDim2.new(0, 150, 0, 30)
+Jerk_Button.Font = Enum.Font.Oswald
+Jerk_Button.Text = "Jerk"
+Jerk_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+Jerk_Button.TextScaled = true
+Jerk_Button.TextSize = 14.000
+Jerk_Button.TextWrapped = true
 
 FlySpeed_Button.Name = "FlySpeed_Button"
 FlySpeed_Button.Parent = Character_Section
@@ -2380,10 +2397,10 @@ CreateClicker(ClearCheckpoint_Button)
 CreateClicker(JumpPower_Button)
 CreateClicker(SaveCheckpoint_Button)
 CreateClicker(Respawn_Button)
+CreateClicker(Jerk_Button)
 CreateClicker(FlySpeed_Button)
 CreateClicker(FlyKey_Button)
 CreateClicker(TeleportKey_Button)
-
 
 CreateToggle(ViewTarget_Button)
 CreateToggle(FlingTarget_Button)
@@ -2908,6 +2925,11 @@ FlyKey_Button.MouseButton1Click:Connect(function()
     end)
 end)
 
+Noclip_Button.MouseButton1Click:Connect(function()
+	ChangeToggleColor(Noclip_Button)
+	setNoclip(not noclip)
+end)
+
 local function StringToKeyCode(str)
 	if not str then return nil end
 	str = str:upper()
@@ -3086,9 +3108,71 @@ Fly_Button.MouseButton1Click:Connect(function()
     end
 end)
 
-Noclip_Button.MouseButton1Click:Connect(function()
-    ToggleNoclip()
-    ChangeToggleColor(Noclip_Button)
+local function runJerk()
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:WaitForChild("Humanoid")
+	local backpack = player:WaitForChild("Backpack")
+
+	if backpack:FindFirstChild("Jerk Off") then return end
+
+	local tool = Instance.new("Tool")
+	tool.Name = "Jerk Off"
+	tool.ToolTip = ";)"
+	tool.RequiresHandle = false
+	tool.Parent = backpack
+
+	local jorkin = false
+	local track
+
+	local function stopTomfoolery()
+		jorkin = false
+		if track then
+			track:Stop()
+			track = nil
+		end
+	end
+
+	tool.Equipped:Connect(function()
+		jorkin = true
+	end)
+
+	tool.Unequipped:Connect(stopTomfoolery)
+	humanoid.Died:Connect(stopTomfoolery)
+
+	task.spawn(function()
+		while task.wait() do
+			if not jorkin then continue end
+
+			local isR15 = humanoid.RigType == Enum.HumanoidRigType.R15
+
+			if not track then
+				local anim = Instance.new("Animation")
+				anim.AnimationId = isR15
+					and "rbxassetid://698251653"
+					or  "rbxassetid://72042024"
+
+				track = humanoid:LoadAnimation(anim)
+			end
+
+			track:Play()
+			track:AdjustSpeed(isR15 and 0.7 or 0.65)
+			track.TimePosition = 0.6
+
+			task.wait(0.1)
+			while track and track.TimePosition < (isR15 and 0.7 or 0.65) do
+				task.wait(0.1)
+			end
+
+			if track then
+				track:Stop()
+				track = nil
+			end
+		end
+	end)
+end
+
+Jerk_Button.MouseButton1Click:Connect(function()
+	runJerk()
 end)
 
 local getRoot = function(char)
