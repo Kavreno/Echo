@@ -967,7 +967,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Fixed Base Plate Generation On Script Load Spawning In Other Games Then Mic Up"
+Announce_Label.Text = "Made Old Emotes Display Keybind In Notification And Added Noclip Button Doesnt Work Yet"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -4094,7 +4094,7 @@ end)
 OldEmotes_Button.MouseButton1Click:Connect(function()
 	if not OldEmotesEnabled then
 		OldEmotesEnabled = true
-		SendNotify("Echo","Loading free emotes.\nCredits: Gi#7331")
+		SendNotify("Echo","Loading free emotes. Keybind Is , \nCredits: Gi#7331")
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/Gi7331/scripts/main/Emote.lua"))()
 	end
 end)
