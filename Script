@@ -15,8 +15,16 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Light = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
+local LocalPlayer = Players.LocalPlayer
+local flying = false
+local KeyDownFunction, KeyUpFunction
+local flyThreadRunning = false
+local UserInputService = game:GetService("UserInputService")
 local httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
+local ctrl = {f = 0, b = 0, l = 0, r = 0}
+local lastctrl = {f = 0, b = 0, l = 0, r = 0}
 local mouse = plr:GetMouse()
+local IYMouse = LocalPlayer:GetMouse()
 local ScriptWhitelist = {}
 local ForceWhitelist = {}
 local TargetedPlayer = nil
@@ -28,6 +36,7 @@ local OldEmotesEnabled = false
 local CannonsFolders = {}
 local FlyToggleKey = nil
 local HoldKey = nil
+local holdKeyPressed = false
 
 pcall(function()
 	MinesFolder = game:GetService("Workspace").Landmines
@@ -312,6 +321,7 @@ local FlySpeed_Input = Instance.new("TextBox")
 local FlyKey_Button = Instance.new("TextButton")
 local FlyKey_Input = Instance.new("TextBox")
 local Fly_Button = Instance.new("TextButton")
+local Noclip_Button = Instance.new("TextButton")
 local TeleportKey_Button = Instance.new("TextButton")
 local TeleportKey_Input = Instance.new("TextBox")
 local Target_Section = Instance.new("ScrollingFrame")
@@ -1013,7 +1023,7 @@ ClearCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 ClearCheckpoint_Button.BackgroundTransparency = 0.500
 ClearCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ClearCheckpoint_Button.BorderSizePixel = 0
-ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 325)
+ClearCheckpoint_Button.Position = UDim2.new(0, 210, 0, 375)
 ClearCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 ClearCheckpoint_Button.Font = Enum.Font.Oswald
 ClearCheckpoint_Button.Text = "Clear checkpoint"
@@ -1058,7 +1068,7 @@ SaveCheckpoint_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 SaveCheckpoint_Button.BackgroundTransparency = 0.500
 SaveCheckpoint_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 SaveCheckpoint_Button.BorderSizePixel = 0
-SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 275)
+SaveCheckpoint_Button.Position = UDim2.new(0, 210, 0, 325)
 SaveCheckpoint_Button.Size = UDim2.new(0, 150, 0, 30)
 SaveCheckpoint_Button.Font = Enum.Font.Oswald
 SaveCheckpoint_Button.Text = "Save checkpoint"
@@ -1156,6 +1166,21 @@ Fly_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
 Fly_Button.TextScaled = true
 Fly_Button.TextSize = 14.000
 Fly_Button.TextWrapped = true
+
+Noclip_Button.Name = "Noclip_Button"
+Noclip_Button.Parent = Character_Section
+Noclip_Button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+Noclip_Button.BackgroundTransparency = 0.500
+Noclip_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Noclip_Button.BorderSizePixel = 0
+Noclip_Button.Position = UDim2.new(0, 210, 0, 275)
+Noclip_Button.Size = UDim2.new(0, 150, 0, 30)
+Noclip_Button.Font = Enum.Font.Oswald
+Noclip_Button.Text = "Noclip"
+Noclip_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+Noclip_Button.TextScaled = true
+Noclip_Button.TextSize = 14.000
+Noclip_Button.TextWrapped = true
 
 TeleportKey_Button.Name = "TeleportKey_Button"
 TeleportKey_Button.Parent = Character_Section
@@ -2349,6 +2374,7 @@ CreateClicker(SkyscraperTP_Button)
 CreateClicker(PoolTP_Button)
 
 CreateToggle(Fly_Button)
+CreateToggle(Noclip_Button)
 CreateClicker(WalkSpeed_Button)
 CreateClicker(ClearCheckpoint_Button)
 CreateClicker(JumpPower_Button)
@@ -2930,12 +2956,6 @@ ClearCheckpoint_Button.MouseButton1Click:Connect(function()
 	SendNotify("Echo","Checkpoint cleared.",5)
 end)
 
-local flying = false
-local ctrl = {f = 0, b = 0, l = 0, r = 0}
-local lastctrl = {f = 0, b = 0, l = 0, r = 0}
-local KeyDownFunction, KeyUpFunction
-local flyThreadRunning = false
-
 local function Fly()
     if flyThreadRunning then return end
     flyThreadRunning = true
@@ -3066,17 +3086,14 @@ Fly_Button.MouseButton1Click:Connect(function()
     end
 end)
 
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+Noclip_Button.MouseButton1Click:Connect(function()
+    ToggleNoclip()
+    ChangeToggleColor(Noclip_Button)
+end)
 
 local getRoot = function(char)
 	return char:FindFirstChild("HumanoidRootPart")
 end
-
-local holdKeyPressed = false
-
-local IYMouse = LocalPlayer:GetMouse()
 
 local function clicktpFunc()
 	local char = LocalPlayer.Character
