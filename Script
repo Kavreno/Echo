@@ -968,7 +968,7 @@ Announce_Label.BorderSizePixel = 0
 Announce_Label.Position = UDim2.new(0, 25, 0, 150)
 Announce_Label.Size = UDim2.new(0, 350, 0, 150)
 Announce_Label.Font = Enum.Font.SourceSans
-Announce_Label.Text = "Small Update For Mic Up Base Plate"
+Announce_Label.Text = "Update The Script To New Version Loadstring Is Copyied To Clipboard"
 Announce_Label.TextColor3 = Color3.fromRGB(100, 100, 100)
 Announce_Label.TextSize = 24.000
 Announce_Label.TextWrapped = true
@@ -3086,69 +3086,6 @@ Fly_Button.MouseButton1Click:Connect(function()
     end
 end)
 
-local function runJerk()
-	local character = player.Character or player.CharacterAdded:Wait()
-	local humanoid = character:WaitForChild("Humanoid")
-	local backpack = player:WaitForChild("Backpack")
-
-	if backpack:FindFirstChild("Jerk Off") then return end
-
-	local tool = Instance.new("Tool")
-	tool.Name = "Jerk Off"
-	tool.ToolTip = ";)"
-	tool.RequiresHandle = false
-	tool.Parent = backpack
-
-	local jorkin = false
-	local track
-
-	local function stopTomfoolery()
-		jorkin = false
-		if track then
-			track:Stop()
-			track = nil
-		end
-	end
-
-	tool.Equipped:Connect(function()
-		jorkin = true
-	end)
-
-	tool.Unequipped:Connect(stopTomfoolery)
-	humanoid.Died:Connect(stopTomfoolery)
-
-	task.spawn(function()
-		while task.wait() do
-			if not jorkin then continue end
-
-			local isR15 = humanoid.RigType == Enum.HumanoidRigType.R15
-
-			if not track then
-				local anim = Instance.new("Animation")
-				anim.AnimationId = isR15
-					and "rbxassetid://698251653"
-					or  "rbxassetid://72042024"
-
-				track = humanoid:LoadAnimation(anim)
-			end
-
-			track:Play()
-			track:AdjustSpeed(isR15 and 0.7 or 0.65)
-			track.TimePosition = 0.6
-
-			task.wait(0.1)
-			while track and track.TimePosition < (isR15 and 0.7 or 0.65) do
-				task.wait(0.1)
-			end
-
-			if track then
-				track:Stop()
-				track = nil
-			end
-		end
-	end)
-end
-
 Jerk_Button.MouseButton1Click:Connect(function()
 	runJerk()
 end)
@@ -4184,31 +4121,22 @@ Serverhop_Button.MouseButton1Click:Connect(function()
 end)
 
 if game.PlaceId == 6884319169 then
-	if workspace:FindFirstChild("MicUpBaseplateFolder") then return end
+	local baseplate = Instance.new("Part")
+	baseplate.Name = "MicUpBaseplate"
+	baseplate.Anchored = true
+	baseplate.CanCollide = true
+	baseplate.Locked = true
 
-	local folder = Instance.new("Folder")
-	folder.Name = "MicUpBaseplateFolder"
-	folder.Parent = workspace
+	baseplate.Size = Vector3.new(8192, 1, 8192)
+	baseplate.Position = Vector3.new(0, -0.6, -512)
 
-	local TILE_SIZE = 512
-	local GRID = 16
+	baseplate.Material = Enum.Material.Grass
+	baseplate.Color = Color3.fromRGB(85, 175, 100)
 
-	for x = -GRID, GRID do
-		for z = -GRID, GRID do
-			local part = Instance.new("Part")
-			part.Name = "MicUpTile"
-			part.Anchored = true
-			part.CanCollide = true
-			part.Locked = true
-			part.Size = Vector3.new(TILE_SIZE, 1, TILE_SIZE)
-			part.Position = Vector3.new(x * TILE_SIZE, -0.6, z * TILE_SIZE)
-			part.Material = Enum.Material.Grass
-			part.Color = Color3.fromRGB(85, 175, 100)
-			part.TopSurface = Enum.SurfaceType.Smooth
-			part.BottomSurface = Enum.SurfaceType.Smooth
-			part.Parent = folder
-		end
-	end
+	baseplate.TopSurface = Enum.SurfaceType.Smooth
+	baseplate.BottomSurface = Enum.SurfaceType.Smooth
+
+	baseplate.Parent = workspace
 end
 
 --GUI Functions
@@ -4329,3 +4257,17 @@ task.spawn(function()
 		end)
 	end
 end)
+
+local RevoLoadstring = [[loadstring(game:HttpGet("https://raw.githubusercontent.com/Kavreno/Revo/refs/heads/main/Script"))()]]
+
+if setclipboard then
+    setclipboard(RevoLoadstring)
+elseif toclipboard then
+    toclipboard(RevoLoadstring)
+end
+
+SendNotify(
+    "Echo",
+    "Update The Script To New Version\nLoadstring Copied To Clipboard",
+    5
+)
